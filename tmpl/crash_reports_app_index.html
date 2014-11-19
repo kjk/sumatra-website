@@ -1,0 +1,42 @@
+<html>
+<head>
+  <title>Recent diagnostic reports</title>
+  <style type="text/css">
+    body, a {
+        font-family: monospace;
+    }
+    td { font-size:85%; padding-left: 4px; padding-right: 4px; }
+  </style>
+</head>
+
+<body>
+  <a href="/app/crashes">All</a> : <a href="/app/crashes?app_name={{.App.Name}}">{{.App.Name}}</a> : {{ .App.CrashesCount }} diagnostic reports for <b>{{ .App.Name }}</b>:
+  {{ $appName := .App.Name }}
+  {{ $showSince := .ShowSince }}
+
+  <p>{{ len .Crashes }} crashes for {{ .DayOrIpAddr }}:</p>
+  <table>
+    {{ range .Crashes }}
+      <tr>
+        <td><a href="/app/crashshow?crash_id={{ .Id }}">{{ .Id }}</a></td>
+        <td>{{ .Version }}</td>
+        <td><a href="/app/crashes?app_name={{$appName}}&crashing_line={{.CrashingLine}}">{{ .ShortCrashingLine }}</a> <span style="color: gray;">({{ .CrashingLineCount }})</span></td>
+        <td><a href="/app/crashes?app_name={{$appName}}&ip_addr={{.IpAddrInternal}}">{{ .ShortIpAddr }}</a></td>
+        {{ if $showSince }}
+        <td>{{ .CreatedOnSince }}</td>
+        {{ end }}
+      </tr>
+    {{ end }}
+  </table>
+
+  <table>
+    {{ range .App.Days }}
+      <tr>
+          <td>{{.Day}}:</td>
+          <td><a href="/app/crashes?app_name={{$appName}}&day={{.Day}}">{{ .CrashesCount }} crashes</a></td>
+      </tr>
+    {{ end }}
+  </table>
+
+</body>
+</html>

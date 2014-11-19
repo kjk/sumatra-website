@@ -1,4 +1,4 @@
-sumatra-website
-===============
+## Sumatra PDF Reader website
 
-Website for Sumatra PDF Reader
+This is code behind http://www.sumatrapdfreader.org website for
+Sumatra PDF Reader.

@@ -6,6 +6,8 @@ import (
 	"io"
 	"math/rand"
 	"net/http"
+	"net/url"
+	"path/filepath"
 	"runtime"
 	"strconv"
 	"strings"
@@ -17,7 +19,8 @@ import (
 var (
 	analyticsCode = "UA-194516-1"
 
-	alwaysLogTime = true
+	alwaysLogTime   = true
+	reloadTemplates = true
 )
 
 func StringEmpty(s *string) bool {
@@ -98,14 +101,52 @@ var (
 )
 
 func parseCmdLineFlags() {
-	flag.StringVar(&httpAddr, "addr", ":5020", "HTTP server address")
+	flag.StringVar(&httpAddr, "addr", ":5030", "HTTP server address")
 	flag.BoolVar(&inProduction, "production", false, "are we running in production")
 	flag.Parse()
 }
 
+func redirectIfNeeded(w http.ResponseWriter, r *http.Request) bool {
+	parsed, err := url.Parse(r.URL.Path)
+	if err != nil {
+		return false
+	}
+
+	redirect := ""
+	switch parsed.Path {
+	case "/":
+		redirect = "free-pdf-reader.html"
+	}
+
+	if redirect == "" {
+		return false
+	}
+
+	http.Redirect(w, r, redirect, 302)
+	return true
+}
+
+func handleMainPage(w http.ResponseWriter, r *http.Request) {
+	if redirectIfNeeded(w, r) {
+		return
+	}
+
+	parsed, err := url.Parse(r.URL.Path)
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	fileName := parsed.Path
+	path := filepath.Join("www", fileName)
+	http.ServeFile(w, r, path)
+}
+
+func InitHttpHandlers() {
+	http.HandleFunc("/", handleMainPage)
+}
+
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
-	var err error
 
 	parseCmdLineFlags()
 
@@ -114,15 +155,14 @@ func main() {
 		alwaysLogTime = false
 	}
 
-	useStdout := !inProduction
-
 	rand.Seed(time.Now().UnixNano())
 
 	if !inProduction {
-		analyticsCode = emptyString
+		analyticsCode = ""
 	}
 
 	InitHttpHandlers()
+	fmt.Printf("Started runing on %s\n", httpAddr)
 	if err := http.ListenAndServe(httpAddr, nil); err != nil {
 		fmt.Printf("http.ListendAndServer() failed with %s\n", err)
 	}

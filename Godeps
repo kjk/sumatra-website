@@ -3,10 +3,6 @@
 	"GoVersion": "go1.3.3",
 	"Deps": [
 		{
-			"ImportPath": "github.com/crowdmob/goamz/aws",
-			"Rev": "0507c4f12df6b7bca76287efff2b86aa315a5f11"
-		},
-		{
 			"ImportPath": "github.com/crowdmob/goamz/s3",
 			"Rev": "0507c4f12df6b7bca76287efff2b86aa315a5f11"
 		},

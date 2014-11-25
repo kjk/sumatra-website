@@ -4,10 +4,8 @@ set -o nounset
 set -o errexit
 set -o pipefail
 
-#rm -rf $TMPDIR/godep
-#godep go build -o sumatrapdfreader
 go tool vet -printfuncs=httpErrorf:1,panicif:1,Noticef,Errorf .
-go build -o sumatrapdfreader
-./sumatrapdfreader
-rm sumatrapdfreader
+go build -o sumatra_website
+./sumatra_website
+rm sumatra_website
 

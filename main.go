@@ -12,8 +12,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
-	_ "github.com/gorilla/mux"
 )
 
 var (

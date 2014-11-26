@@ -14,7 +14,7 @@
 # sudo ln -s /home/sumatrawebsite/www/app/current/scripts/sumatrawebsite.initd /etc/init.d/sumatrawebsite
 
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-DAEMON=/home/sumatrawebsite/www/app/current/sumatrawebsite_app
+DAEMON=/home/sumatrawebsite/www/app/current/server_run.sh
 DAEMON_ARGS=-production
 NAME=sumatrawebsite
 DESC=sumatrawebsite

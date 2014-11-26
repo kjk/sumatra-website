@@ -5,5 +5,4 @@ set -o errexit
 set -o pipefail
 
 cd /home/sumatrawebsite/app/current
-exec ./sumatra_website &>>crash.log
-
+exec ./sumatra_website "$@" &>>crash.log

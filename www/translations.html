@@ -71,69 +71,9 @@ window.onload = myInit;
 <div class="content">
 
 <h2>How to translate Sumatra PDF</h2>
-<p>If you want to see Sumatra PDF translated to your language, you can make it happen.
-</p>
 
-<p>
-<b>First important note:</b> the file must be saved with utf8 encoding with BOM mark. If it's saved in a
-different encoding, it'll be unusable. Please use e.g. free <a href="http://www.flos-freeware.ch/notepad2.html">notepad2</a>
-(menu <tt>File\Encoding\UTF-8 with signature</tt>).
-</p>
-
-<p>
-<b>Second important note:</b> please really read the first important note. It's really that important. I've
-already had several translations submitted that were not saved in the right format.
-</p>
-
-<p>
-Each language has a separate translation file. It's format is very simple: english string followed by translation
-followed by an empty line. For example, part of file with German translation might look like:
-<pre>
-&amp;File
-&amp;Datei
-
-&amp;Open\tCtrl-O
-&amp;Offnen\tCtrl-O
-</pre>
-</p>
-
-Lines that begin with "#" are comments. At the end of the file is a list of (commented out) strings that are
-not translated in this language.
-
-<p>
-Here's a table of all languages:
-<div id="langs_info">
-</div>
-</p>
-
-<p>
-<b>To contribute to a translation:</b></a>
-<ul>
-<li>grab the latest version of strings file for your language, either by downloading the file using a link above or <a href="http://code.google.com/p/sumatrapdf/source/checkout">checking out the sources</a> </li>
-<li>add and improve translations for the language you know well</li>
-<li><a href="/">e-mail me</a> a modified file</li>
-</ul>
-</p>
-
-<h2>Few notes</h2>
-
-<p>Keep in mind that translation is an on-going process. During development new strings are being
-added and they'll need to be translated. Before releasing a new version I plan to
-ask for help translating new strings on the <a href="http://forums.fofou.org/sumatrapdf/">forum</a></p>
-
-<p>Don't worry if you don't have the time to translate all of the strings at once. Even one translated
-string is better than nothing, so do send me even incomplete translations.</p>
-
-<h2>How can you test the translations?</h2>
-<p>If you can't build Sumatra PDF from sources, then you're out of luck. You have to send
-me the translations without testing and wait for a new release.</p>
-
-<p>If you can build Sumatra PDF, you can rebuild program with new translations. It's very simple:
-<ul>
-<li>change <tt>strings-*.txt</tt> file for your language</li>
-<li>run <tt>python update_translations.py</tt>in <tt>src</tt> directory</li>
-<li>rebuild the program</li>
-</ul>
+<p>You can contribute translations using <a href="http://www.apptranslator.org/app/SumatraPDF">
+web-based AppTranslator</a> service.
 </p>
 
 <h2>Translators</h2>

@@ -368,7 +368,7 @@ function cookieOrUserLang() {
 }
 
 // sumatra urls are in format:
-// /software/sumatrapdf/${url}[-${lang}].html
+// /${url}[-${lang}].html
 // return ${url} and ${lang} parts
 // ${lang} can be "" which means english (en)
 function getBaseUrlAndLang() {
@@ -488,7 +488,7 @@ function urlFromBaseUrlLang(baseUrl, lang) {
 			<li><a href="news.html" title="News"><span>Новости</span></a></li>
 			<li><a href="manual.html" title="Manual"><span>Руководство пользователя</span></a></li>
 			<li><a href="download-free-pdf-viewer.html" title="Download"><span>Загрузка</span></a></li>
-			<li><a href="http://code.google.com/p/sumatrapdf/wiki/JoinTheProject" title="Contribute"><span>Сотрудничество</span></a></li>
+			<li><a href="https://github.com/sumatrapdfreader/sumatrapdf/wiki/Contribute-code" title="Contribute"><span>Сотрудничество</span></a></li>
 			<li><a href="translations.html" title="Translations"><span>Переводы</span></a></li>
 			<li><a href="http://forums.fofou.org/sumatrapdf/" title="Forums"><span>Форум</span></a></li>
 		</ul>
@@ -561,30 +561,6 @@ function langChanged() {
     forceRedirectToLang(lang);
     return true;
 };
-
-/*
-function buttonsHtmlObsolete() {
-return '<span style="position:relative; left: 22px; top: 6px;">\
-<script type="text/javascript" src="http://apis.google.com/js/plusone.js"></script>\
-<g:plusone size="medium" href="http://blog.kowalczyk.info/software/sumatrapdf/"></g:plusone>\
-</span>';
-}
-*/
-
-/*
-function buttonsOldHtml() {
-return '<span style="position:relative; left: 22px; top: 6px;">\
-<script type="text/javascript" src="http://apis.google.com/js/plusone.js"></script>\
-<g:plusone size="medium" href="http://blog.kowalczyk.info/software/sumatrapdf/"></g:plusone>\
-</span>\
-<span style="position:relative; left: 12px; top: 6px;">\
-<a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.kowalczyk.info/software/sumatrapdf/free-pdf-reader.html" data-text="SumatraPDF - free PDF reader for Windows" data-count="horizontal" data-via="kjk">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>\
-</span>\
-<span style="position:relative; top: 7px; left: 0px;">\
-<iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fblog.kowalczyk.info%2Fsoftware%2Fsumatrapdf%2F&amp;layout=button_count&amp;show_faces=false&amp;width=450&amp;action=like&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:88px; height:21px;" allowTransparency="true"></iframe>\
-</span>';
-}
-*/
 
 function yepiAdHtml() {
 return '<center>\

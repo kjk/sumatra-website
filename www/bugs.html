@@ -10,41 +10,33 @@
 <script type="text/javascript" src="sumatra.js"></script>
 
 <div id="container">
-
-<div id="banner">
-
-<h1>Sumatra PDF <font size="-1">is a PDF, ePub, MOBI, CHM, XPS, DjVu, CBZ, CBR reader for Windows</font></h1>
-<script type="text/javascript">document.write(navHtml());</script>
-
+    <div id="banner">
+        <h1>Sumatra PDF <font size="-1">is a PDF, ePub, MOBI, CHM, XPS, DjVu, CBZ, CBR reader for Windows</font></h1>
+        <script type="text/javascript">document.write(navHtml());</script>
+    </div>
+    <div id="center">
+        <div class="content">
+            <h2>Submitting bugs</h2>
+            <p>Found bug? <a href="https://github.com/sumatrapdfreader/sumatrapdf/issues">
+            Open a new issue</a> in the bug tracker. </p>
+            <p>Does it involve a specific PDF? Make sure to post the PDF on-line
+            somewhere (e.g. at <a href="http://drop.io/">http://drop.io</a>)
+            and post a link in the bug description.</p>
+        </div>
+    </div>
 </div>
 
-<div id="center">
-<div class="content">
-
-<h2>Submitting bugs</h2>
-
-<p>Found bug? <a href="https://github.com/sumatrapdfreader/sumatrapdf/issues">
-Open a new issue</a> in the bug tracker. </p>
-<p>Does it involve a specific PDF? Make sure to post the PDF on-line
-somewhere (e.g. at <a href="http://drop.io/">http://drop.io</a>)
-and post a link in the bug description.</p>
-
-</div>
-</div>
 <hr/>
 <center><a href="http://blog.kowalczyk.info">Krzysztof Kowalczyk</a></center>
-</div>
 
-<script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-194516-1']);
-  _gaq.push(['_trackPageview']);
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
-  })();
+  ga('create', 'UA-194516-5', 'auto');
+  ga('send', 'pageview');
 </script>
 
 </body>

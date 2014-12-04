@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	analyticsCode = "UA-194516-1"
+	analyticsCode = "UA-194516-5"
 
 	alwaysLogTime   = true
 	reloadTemplates = true

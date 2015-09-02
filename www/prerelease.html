@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
 
@@ -26,14 +27,25 @@ function myInit() {
 	name = sumLatestInstaller.split("/")[5];
 	html = "<a href='" + sumLatestInstaller + "'>" + name + "</a>";
 	$("urlinstaller").innerHTML = html;
+
+	name = sumLatestExe64.split("/")[5];
+	html = "<a href='" + sumLatestExe64 + "'>" + name + "</a>";
+	$("urlexe64").innerHTML = html;
+
+	name = sumLatestInstaller64.split("/")[5];
+	html = "<a href='" + sumLatestInstaller64 + "'>" + name + "</a>";
+	$("urlinstaller64").innerHTML = html;
 }
 window.onload = myInit;
 
 </script>
 </head>
 <body>
-<noscript><p><center><font color=red>Your browser does not support JavaScript or you've disabled JavaScript!
-Javascript is required to view this page.</font></center><p></noscript>
+<noscript>
+	<p><center><font color="red">Your browser does not support JavaScript or you've
+		disabled JavaScript! Javascript is required to view this page.</font>
+	</center></p>
+</noscript>
 
 <p><b><font color="red">Please do
 not redistribute</font></b>. SumatraPDF pre-release builds are for testing. They
@@ -52,8 +64,22 @@ might have bugs not present in official releases.</p>
 </table>
 </p>
 
+<p>64-bit binaries:
+<table style="margin-left:8px">
+<tr>
+  <td>full installer 64-bit:&nbsp;</td>
+  <td><span id="urlinstaller64"></span></td>
+</tr>
+<tr>
+  <td>portable version 64-bit:&nbsp;</td>
+  <td><span id="urlexe64"></span></td>
+</tr>
+</table>
+</p>
+
+
 <hr>
-<center><a href="http://blog.kowalczyk.info">Krzysztof Kowalczyk</a></center>
+<center><a href="http://www.sumatrapdfreader.org/">SumatraPDF Reader</a></center>
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

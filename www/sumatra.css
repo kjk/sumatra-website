@@ -114,9 +114,6 @@ background-color: #fff;
     font-weight: normal;
 }
 
-.trans a {
-}
-
 .gooad {
   margin-top: 4px;
   margin-bottom: 6px;
@@ -129,4 +126,15 @@ background-color: #fff;
   color:gray;
   font-size:70%;
   margin:0px;
+}
+
+.ad {
+  font-family: geneva,helvetica,arial,sans-serif;
+  font-size: 12pt;
+  background-color: #FBF0FA;
+  padding: 4px 8px;
+}
+
+.adl {
+  color: green;
 }

@@ -1,9 +1,9 @@
 // update after releasing a new version
-var gSumVer = "3.0";
+var gSumVer = "3.1";
 
 // used by download-prev* pages, update after releasing a new version
 var gPrevSumatraVersion = [
-	"2.5.2", "2.5.1",
+	"3.0", "2.5.2", "2.5.1",
 	"2.5", "2.4", "2.3.2", "2.3.1", "2.3", "2.2.1", "2.2", "2.1.1",
 	"2.1", "2.0.1", "2.0", "1.9", "1.8", "1.7", "1.6",
 	"1.5.1", "1.5", "1.4", "1.3", "1.2", "1.1", "1.0.1",
@@ -237,7 +237,7 @@ if (!Array.prototype.indexOf) {
             }
         }
         return -1;
-    }
+    };
 }
 
 function isValidLang(lang) {
@@ -245,7 +245,9 @@ function isValidLang(lang) {
 }
 
 function langNativeName(lang) {
-	if ("" == lang) { return "English" };
+	if ("" === lang) {
+		return "English";
+	}
 	var i;
 	for (i=0; i<gLanguages.length / 2; i++) {
 		if (gLanguages[i*2] == lang) {
@@ -283,7 +285,7 @@ function setCookie(name,val,expireInDays) {
     var d=new Date();
     d.setDate(d.getDate()+expireInDays);
     document.cookie=name+"="+escape(val)+
-    ((expireInDays==null) ? "" : ";expires="+d.toGMTString());
+    ((expireInDays === null) ? "" : ";expires="+d.toGMTString());
 }
 
 function getCookie(name) {
@@ -292,7 +294,7 @@ function getCookie(name) {
 	if (-1 == start) { return null; }
     start += name.length+1;
     var end = c.indexOf(";", start);
-    if (-1 == end) { end = c.length };
+    if (-1 == end) { end = c.length; }
     return unescape(c.substring(start,end));
 }
 
@@ -377,7 +379,7 @@ function getBaseUrlAndLang() {
 	url = url[url.length-1];
 	url = url.split(".html")[0];
 	if (url[url.length-3] == '-') {
-		lang = url.substring(url.length-2)
+		lang = url.substring(url.length-2);
 		url = url.substring(0, url.length-3);
 	}
 	//alert(url + "," + lang);
@@ -385,7 +387,7 @@ function getBaseUrlAndLang() {
 }
 
 function isEng(lang) {
-	return (lang == "") || (lang=="en");
+	return (lang === "") || (lang=="en");
 }
 
 // construct text like:
@@ -412,13 +414,12 @@ function langsNavHtmlOld() {
 	lang = tmp[1];
 	var translations = translationsForPage(baseUrl);
 	translations.sort(sortByLang);
-	if (0 == translations.length) {
+	if (0 === translations.length) {
 		// shouldn't happen becase should only be called from pages
 		// that were translated
 		alert("No translations for page " + baseUrl);
 	}
 	var s = '<span style="float: right;">';
-	var l;
 	if (!isEng(lang)) {
 		s += langsLinkHtml(baseUrl, "en");
 	}
@@ -446,10 +447,8 @@ Language:
 */
 function langsNavHtml() {
 	var i, userLang, langName, issel;
-	var userLang = cookieOrUserLang();
-	var s = '<span style="float: right; color: black; font-size: 80%;">\
-Language:\
-<select id=langSelect onchange="langChanged();">'
+	userLang = cookieOrUserLang();
+	var s = '<span style="float: right; color: black; font-size: 80%;">\nLanguage:\n<select id=langSelect onchange="langChanged();">';
 
 	for (i=0; i<gLanguages.length / 2; i++) {
 		issel = "";
@@ -463,7 +462,7 @@ Language:\
 	s += '<option value="default">Default</option>';
 	s += '</select></span>';
 	return s;
-};
+}
 
 function translateTabText(lang, s) {
 	if (!gTabTrans[lang]) { return s; }
@@ -536,7 +535,7 @@ function zipHref(ver) {
 
 // used by download-prev* pages
 function prevLanguagesList(installerStr, zipFileStr) {
-	var s, i;
+	var i;
 	var s = "";
 	for (i=0; i < gPrevSumatraVersion.length; i++)
 	{
@@ -560,7 +559,7 @@ function langChanged() {
     setLangCookie(lang);
     forceRedirectToLang(lang);
     return true;
-};
+}
 
 function yepiAdHtml() {
 return '<center>\

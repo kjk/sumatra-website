@@ -54,6 +54,11 @@ function dlAfterHtml(s1,s2,s3,s4) {
     '<a href="' + gSumZipUrl + '">' + s3 + '</a>' + s4;
 }
 
+function dlAfterHtml64(s1,s2,s3,s4) {
+    return '<a href="' + gSumExeUrl64 + '">' + s1 + '</a>' + s2 +
+    '<a href="' + gSumZipUrl64 + '">' + s3 + '</a>' + s4;
+}
+
 var gRuTrans = {
 	"Home" : "Начало",
 	"Version History" : "Новости",

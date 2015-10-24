@@ -16,6 +16,11 @@ var gSumExeUrl = "https://kjkpub.s3.amazonaws.com/sumatrapdf/rel/SumatraPDF-" + 
 var gSumZipName = "SumatraPDF-" + gSumVer + ".zip";
 var gSumExeName = "SumatraPDF-" + gSumVer + "-install.exe";
 
+var gSumZipUrl64 = "https://kjkpub.s3.amazonaws.com/sumatrapdf/rel/SumatraPDF-" + gSumVer + "-64.zip";
+var gSumExeUrl64 = "https://kjkpub.s3.amazonaws.com/sumatrapdf/rel/SumatraPDF-" + gSumVer + "-64-install.exe";
+var gSumZipName64 = "SumatraPDF-" + gSumVer + "-64.zip";
+var gSumExeName64 = "SumatraPDF-" + gSumVer + "-64-install.exe";
+
 // used by download-free-pdf-viewer*.html pages
 function dlHtml(s1,s2, s3) {
 	if (!s3) {
@@ -27,6 +32,19 @@ function dlHtml(s1,s2, s3) {
 	gSumExeUrl + '" onclick="return SetupRedirect()">' + gSumExeName +
 	'</a></td></tr><tr><td>' + s2 + '&nbsp;&nbsp;</td><td><a href="' +
 	gSumZipUrl + '" onclick="return SetupRedirect()">' + gSumZipName +
+	'</a>' + s3 + '</td></tr></table>';
+}
+
+function dlHtml64(s1,s2, s3) {
+	if (!s3) {
+		s3 = "";
+	} else {
+		s3 = " <span style='font-size:90%; color:gray'>" + s3 + "</span>";
+	}
+	return '<table><tr><td>' + s1 + '&nbsp;&nbsp;</td><td><a href="' +
+	gSumExeUrl64 + '" onclick="return SetupRedirect()">' + gSumExeName64 +
+	'</a></td></tr><tr><td>' + s2 + '&nbsp;&nbsp;</td><td><a href="' +
+	gSumZipUrl64 + '" onclick="return SetupRedirect()">' + gSumZipName64 +
 	'</a>' + s3 + '</td></tr></table>';
 }
 

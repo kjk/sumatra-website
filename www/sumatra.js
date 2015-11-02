@@ -1,9 +1,9 @@
 // update after releasing a new version
-var gSumVer = "3.1";
+var gSumVer = "3.1.1";
 
 // used by download-prev* pages, update after releasing a new version
 var gPrevSumatraVersion = [
-	"3.0", "2.5.2", "2.5.1",
+	"3.1", "3.0", "2.5.2", "2.5.1",
 	"2.5", "2.4", "2.3.2", "2.3.1", "2.3", "2.2.1", "2.2", "2.1.1",
 	"2.1", "2.0.1", "2.0", "1.9", "1.8", "1.7", "1.6",
 	"1.5.1", "1.5", "1.4", "1.3", "1.2", "1.1", "1.0.1",
@@ -552,19 +552,46 @@ function navHtml() {
 function installerHref(ver) {
 	return '<a href="http://kjkpub.s3.amazonaws.com/sumatrapdf/rel/SumatraPDF-' + ver + '-install.exe">SumatraPDF-' + ver + '-install.exe</a>';
 }
+
+function installer64Href(ver) {
+	return '<a href="http://kjkpub.s3.amazonaws.com/sumatrapdf/rel/SumatraPDF-' + ver + '-64-install.exe">SumatraPDF-' + ver + '-64-install.exe</a>';
+}
+
 function zipHref(ver) {
 	return '<a href="http://kjkpub.s3.amazonaws.com/sumatrapdf/rel/SumatraPDF-' + ver + '.zip">SumatraPDF-' + ver + '.zip</a>';
 }
 
+function zip64Href(ver) {
+	return '<a href="http://kjkpub.s3.amazonaws.com/sumatrapdf/rel/SumatraPDF-' + ver + '-64.zip">SumatraPDF-' + ver + '-64.zip</a>';
+}
+
+function verNewerOrEqThan31(ver) {
+		var parts = ver.split(".");
+		var major = parseInt(parts[0]);
+		if (major > 3) {
+			return true;
+		}
+		if (major < 3 || parts.length < 2) {
+			return false;
+		}
+		var minor = parseInt(parts[1]);
+		return minor >= 1;
+}
+
 // used by download-prev* pages
 function prevLanguagesList(installerStr, zipFileStr) {
-	var i;
 	var s = "";
-	for (i=0; i < gPrevSumatraVersion.length; i++)
+	for (var i=0; i < gPrevSumatraVersion.length; i++)
 	{
 		var ver = gPrevSumatraVersion[i];
-		s += '<p>' + installerStr + ': ' + installerHref(ver) + '<br>\n';
-		s += zipFileStr + ': ' + zipHref(ver) + '</p>\n';
+		s += '<p>';
+		s += installerStr + ': ' + installerHref(ver) + '<br>\n';
+		s += zipFileStr + ': ' + zipHref(ver);
+		if (verNewerOrEqThan31(ver)) {
+				s += '<br>' + installerStr + ' 64-bit: ' + installer64Href(ver) + '<br>\n';
+			s += zipFileStr + ' 64-bit: ' + zip64Href(ver);
+		}
+		s += '</p>\n';
 	}
 	return s;
 }

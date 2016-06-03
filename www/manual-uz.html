@@ -130,19 +130,25 @@ table.shortcuts {
     </table>
     <p></p>
 
+    <h2 id="advanced-settings">Qo'shimcha sozlamalar</h2>
+
+    <p>
+    2.3 versiyasidan boshlab, SumatraPDF <a href="settings.html">sozlash fayli</a>ni tahrirlash orqali sozlanishi mumkin.
+    </p>
+
     <h2 id="manual-cmd-line">Buyruq satri argumentlari</h2>
 
     To'liq ma'lumot olish uchun <a href="https://github.com/sumatrapdfreader/sumatrapdf/wiki/Command-line-arguments">ushbu sahifaga o'ting</a>.
 
     <p>
-    Command-line arguments:
+    Buyruq satri argumentlari:
     <table class="shortcuts" style="font-size: 90%; line-height: 105%">
       <tr><td align="right"><b>-page $pageno</b></td>
-        <td>&nbsp;open PDF at a given page</td></tr>
+        <td>&nbsp;PDF berilgan sahifada ochish</td></tr>
       <tr><td align="right"><b>-named-dest $dest</b></td>
         <td>&nbsp;open PDF at a specified named destination</td></tr>
       <tr><td align="right"><b>-lang $language</b></td>
-        <td>&nbsp;set user interface language. $language is a two-letter language code e.g. "en", "de"</td></tr>
+        <td>&nbsp;foydalanuvchi interfeysining tilini belgilash. $language bu ikkita harfli til codi, masalan "en", "de"</td></tr>
 
 <!--
       <tr><td align="right"><b>-title $title</b></td>
@@ -150,117 +156,56 @@ table.shortcuts {
 -->
 
       <tr><td align="right"><b>-restrict</b></td>
-        <td>&nbsp;run in <a href="#manual-restricted">restricted mode</a>.</td></tr>
+        <td>&nbsp;<a href="#manual-restricted">cheklangan usul</a>da ishga tushirish.</td></tr>
       <tr><td align="right"><b>-reuse-instance</b></td>
-        <td>&nbsp;use existing Sumatra process instead of starting a new process</td></tr>
+        <td>&nbsp;Sumatra yangi jarayonini ishga tushirmasdan mavjud jarayonidan foydalanish</td></tr>
       <tr><td align="right"><b>-presentation $file.pdf</b></td>
-        <td>&nbsp;opens a PDF file in presentation (full-screen) mode</td></tr>
+        <td>&nbsp;PDF faylini namoyish (to'liq ekran) usulida ochish</td></tr>
       <tr><td align="right"><b>-register-for-pdf</b></td>
-        <td>&nbsp;forces registering Sumatra as a default reader for PDF files and exits</td></tr>
+        <td>&nbsp;Sumatrani sukut PDF fayllarini o'qish vositasi sifatida reestrdan o'tkazishni jadallatish va chiqish</td></tr>
       <tr><td align="right"><b>-esc-to-exit</b></td>
-        <td>&nbsp;if given, ESC key will exit the program. It's persisted in settings file, so only needs to be provided once</td></tr>
+        <td>&nbsp;berilganda, ESC tugmasini bosib dasturdan chiqilmaydi. U sozlamalar faylida saqlanadi, shuning uchun bir marta ko'rsatiladi</td></tr>
       <tr><td align="right"><b>-bg-color $color</b></td>
-        <td>&nbsp;change the yellow background color to a provided color in hex format (e.g. 0xffff00)</td></tr>
+        <td>&nbsp;sariq orqa fon rangini belgilangan hex formatdagi (masalan, 0xffff00) rangga o'zgartirish</td></tr>
       <tr><td align="right"><b>-invert-colors</b></td>
-        <td>&nbsp;will invert colors in the PDF (e.g. white would become black and black would become white)</td>
+        <td>&nbsp;PDF ranglarini teskari qilish (masalan, oq qora bo'ladi va qora oq)</td>
       </tr>
       <tr><td align="right"><b>-manga-mode $mode</b></td>
-        <td>&nbsp;enable display of manga comic books. $mode can be 1, true, 0, false</td>
+        <td>&nbsp;manga comic kitoblarning ko'rsatishni yoqish. $mode 1, true, 0, false bo'lishi mumkin</td>
       </tr>
 
     </table>
     </p>
 
-    <p>Note: <b>-esc-to-exit</b> and <b>-bg-color</b> options change the defaults and persist
-    them in sumatrapdfprefs.dat file (in %appdata%\SumatraPDF directory if installed, in the
-    same directory as executable in portable mode). To revert back to defaults, you can
-    delete sumatrapdfprefs.dat file.</p>
-
-    <p>Printing related cmd-line arguments:
-    <table class="shortcuts" style="font-size: 90%; line-height: 105%">
-      <tr><td align="right"><b>-print-to-default $file.pdf</b></td>
-        <td>&nbsp;prints a PDF file on a default printer</td></tr>
-      <tr><td align="right"><b>-print-to $printer_name $file.pdf</b></td>
-        <td>&nbsp;prints a PDF on a given printer</td></tr>
-      <tr><td align="right"><b>-print-dialog $file.pdf</b></td>
-        <td>&nbsp;opens a PDF file and shows a print dialog to select printer and printing options</td></tr>
-      <tr><td align="right"><b>-exit-on-print</b></td>
-        <td>&nbsp;when -print-to-default or -print-to is used, will exit after printing</td></tr>
-    </table>
+    <h2 id="manual-latex">LaTeX ko'rishni qo'llab-quvvatlash</h2>
+    <p> Sumatra LaTeX hujjatlarni ko'rish vositasiga ega.
+        Turli matn tahrirchilarni Sumatraning ko'rish funksionalligini sozlash bo'yicha qo'shimcha ma'lumot va batafsil yo'riqnomalar uchun <a href="http://william.famille-blum.org/blog/static.php?page=static081010-000413">ushbu sahifa</a>ni o'qing.
     </p>
 
-    <h2 id="manual-latex">LaTeX preview support</h2>
-    <p> Sumatra has built-in support for easy previewing of LaTeX documents.
-        Read <a href="http://william.famille-blum.org/blog/static.php?page=static081010-000413">this page</a> for more information and detailed instructions on how to configure various text editors
-        to integrate with Sumatra's preview functionality.
-    </p>
-
-    <h2 id="manual-browser-plugin">Browser plugin</h2>
-    <p>The "full installer" version includes a browser plugin for Firefox, Chrome
-      and Opera (Internet Explorer is not supported). It's not installed by default
-      so you have to use installer's options button to install it.</p>
-    <p>You might need to configure the browser too: enable Sumatra's PDF
-       plugin and disable PDF plugin from other programs.</p>
-
-    <p><b>Firefox</b></p>
-    <p>You need to disable PDF plugins from other programs (e.g. Adobe Reader
-      or Foxit) if you have them installed. Use <b>Tools/Add-ons</b> menu.
-      Switch to <b>Plugins</b> tab, enable Sumatra PDF plugin and disable
-      other PDF plugins.</p>
-
-    <p><b>Chrome</b></p>
-    <p>Newer version of Chrome have a PDF plugin built-in. If you want to use
-    Sumatra's plugin, you need to disable Chrome's plugin (and potentially
-    plugins from other apps like Adobe Reader or FoxIt).</p>
-    <p>Type <b>about:plugins</b> in the address bar, make sure to enable
-    Sumatra PDF plugin and disable other PDF plugins.</p>
-
-    <p><b>Opera</b></p>
-    <ol>
-    <li>Run Opera and hit CTRL + F12</li>
-    <li>Choose Advanced tab</li>
-    <li>From the list on the left choose Downloads</li>
-    <li>In the middle box find "application/pdf" and Click "Edit" on the right</li>
-    <li>Enable "Use the plugin" at the bottom and choose "SumatraPDF Browser Plugin"</li>
-    <li>Click "OK" and then "OK". Restart Opera</li>
-    </ol>
-
-    <h2 id="manual-restricted">Running in restricted mode</h2>
-    <p>A restricted mode is useful if you want to use SumatraPDF as a bundled viewer
-    for your program's documentation or in kiosk mode. In restricted mode some actions
-    that are not appropriate in such context are disabled:</p>
+    <h2 id="manual-restricted">Cheklangan usulda ishga tushirish</h2>
+    <p>Cheklangan usul SumatraPDF dasturingiz hujjatlarining ko'rish vositasi sifatida yoki kiosk usulida foydalanishni istaganingizda foydali. Cheklangan usulda ba'zi nomunosib amallar o'chirilgan:</p>
     <ul>
-      <li>opening new files</li>
-      <li>launching URLs from with PDF document</li>
-      <li>text and image selection</li>
-      <li>printing</li>
-      <li>changing default settings</li>
-      <li>saving to disk</li>
-      <li>automatic and manual update checks</li>
-      <li>a history of recently opened files</li>
-      <li>TeX support</li>
-      <li>registering as a default PDF viewer</li>
-      <li>opening with Adobe Acrobat</li>
-      <li>e-mailing PDF</li>
+      <li>yangi fayllarni ochish</li>
+      <li>PDF hujjatidan URL bo'yicha o'tish</li>
+      <li>matn va tasvirlarni tanlash</li>
+      <li>chop etish</li>
+      <li>sukut sozlamalarini o'zgartirish</li>
+      <li>diskka saqlash</li>
+      <li>yangilanishlarni avtomatik va qo'l usulda tekshirish</li>
+      <li>yaqinda ochilgan fayllarning tarixi</li>
+      <li>TeX qo'llab-quvvatlash</li>
+      <li>sukut PDF ko'rish vositasi sifatida reestrdan o'tkazish</li>
+      <li>Adobe Acrobat bilan ochish</li>
+      <li>PDF elektron pochtadan yuborish</li>
     </ul>
 
-    <h2 id="manual-notes">Notes</h2>
+    <h2 id="manual-limitations">Ma'lum cheklovlar</h2>
 
-    <p>If "Remember settings for each document" is turned on and a PDF is later opened again,
-    Sumatra PDF will return to the page shown when it was closed. Settings are not only
-    stored for those 10 files shown in the "File" menu - but resuming will not work
-    if the file has been moved in the meantime</p>
+    <p>Interaktiv shakllarni tahrirlash va izohlatni qo'shish amalga oshirilmagan.</p>
 
-    <p>Some settings (e.g. fullscreen) are saved as defaults without a GUI option,
-      when SumatraPDF is closed without any document open.</p>
+    <h2 id="more-docs">Qo'shimcha hujjatlar</h2>
 
-    <h2 id="manual-limitations">Known limitations</h2>
-
-    <p>Editing interactive forms and adding comments is not implemented.</p>
-
-    <h2 id="more-docs">More documentation</h2>
-
-    <p>You can find more documentation at <a href="https://github.com/sumatrapdfreader/sumatrapdf/wiki">this page</a>.</p>
+    <p>Qo'chimcha hujjatlarni Siz <a href="https://github.com/sumatrapdfreader/sumatrapdf/wiki">ushbu sahifa</a>da topishingiz mumkin.</p>
 <!--
     <h2 id="manual-browser">Disable viewing PDF files directly in web browser (IE and Firefox)</h2>
     Adobe Acrobat also comes with Internet Explorer and Firefox plugin

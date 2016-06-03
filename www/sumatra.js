@@ -226,7 +226,7 @@ var gLanguages = [
 	"ja", ["日本語", "Japanese"],
 	"cn", ["简体中文", "Chinese"],
 	"ka", ["ქართული ენა", "Georgian"],
-	"uz", ["O'zbek", "Uzbek"]
+	"uz", ["O'zbekcha", "Uzbek"]
 ];
 
 // For ie compat, from https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/indexOf

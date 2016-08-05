@@ -15,9 +15,6 @@ import (
 
 var (
 	analyticsCode = "UA-194516-5"
-
-	alwaysLogTime   = true
-	reloadTemplates = true
 )
 
 func writeResponse(w http.ResponseWriter, responseBody string) {
@@ -36,7 +33,7 @@ var (
 )
 
 func parseCmdLineFlags() {
-	flag.StringVar(&httpAddr, "addr", ":5030", "HTTP server address")
+	flag.StringVar(&httpAddr, "addr", "127.0.0.1:5030", "HTTP server address")
 	flag.BoolVar(&inProduction, "production", false, "are we running in production")
 	flag.Parse()
 }
@@ -78,7 +75,7 @@ func handleMainPage(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, path)
 }
 
-func InitHttpHandlers() {
+func initHTTPHandlers() {
 	http.HandleFunc("/", handleMainPage)
 }
 
@@ -87,18 +84,13 @@ func main() {
 
 	parseCmdLineFlags()
 
-	if inProduction {
-		reloadTemplates = false
-		alwaysLogTime = false
-	}
-
 	rand.Seed(time.Now().UnixNano())
 
 	if !inProduction {
 		analyticsCode = ""
 	}
 
-	InitHttpHandlers()
+	initHTTPHandlers()
 	fmt.Printf("Started runing on %s\n", httpAddr)
 	if err := http.ListenAndServe(httpAddr, nil); err != nil {
 		fmt.Printf("http.ListendAndServer() failed with %s\n", err)

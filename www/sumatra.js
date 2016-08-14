@@ -1,9 +1,9 @@
 // update after releasing a new version
-var gSumVer = "3.1.1";
+var gSumVer = "3.1.2";
 
 // used by download-prev* pages, update after releasing a new version
 var gPrevSumatraVersion = [
-	"3.1", "3.0", "2.5.2", "2.5.1",
+	"3.1.1", "3.1", "3.0", "2.5.2", "2.5.1",
 	"2.5", "2.4", "2.3.2", "2.3.1", "2.3", "2.2.1", "2.2", "2.1.1",
 	"2.1", "2.0.1", "2.0", "1.9", "1.8", "1.7", "1.6",
 	"1.5.1", "1.5", "1.4", "1.3", "1.2", "1.1", "1.0.1",
@@ -232,7 +232,6 @@ var gLanguages = [
 // For ie compat, from https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/indexOf
 if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function (searchElement) {
-        "use strict";
         if (this === void 0 || this === null) {
             throw new TypeError();
         }
@@ -267,20 +266,6 @@ function isValidLang(lang) {
 	return -1 != gLanguages.indexOf(lang);
 }
 
-function langNativeName(lang) {
-	if ("" === lang) {
-		return "English";
-	}
-	var i;
-	for (i=0; i<gLanguages.length / 2; i++) {
-		if (gLanguages[i*2] == lang) {
-			return gLanguages[i*2+1][0];
-		}
-	}
-	alert("No native name for lang '" + lang + "'");
-	return "";
-}
-
 var gTransalatedPages = [
 	"download-free-pdf-viewer", ["ka", "ru", "cn", "de", "es", "fr", "ja", "pt", "ro", "ru", "bg", "sr", "eu", "uz", "hr"],
 	"download-prev", ["ka", "de", "fr", "es", "ja", "pt", "ro", "sr", "eu", "uz", "hr"],
@@ -289,10 +274,24 @@ var gTransalatedPages = [
 	"manual", ["ka", "ru", "cn", "de", "fr", "es", "ja", "pt", "ro", "ru", "bg", "sr", "eu", "uz", "hr"]
 ];
 
+function langNativeName(lang) {
+	if ("" === lang) {
+		return "English";
+	}
+	var n = gLanguages.length / 2;
+	for (var i=0; i < n; i++) {
+		if (gLanguages[i*2] == lang) {
+			return gLanguages[i*2+1][0];
+		}
+	}
+	alert("No native name for lang '" + lang + "'");
+	return "";
+}
+
 // return a list of langauges that a given page is translated into
 function translationsForPage(baseUrl) {
-	var i;
-	for (i=0; i<gTransalatedPages.length / 2; i++) {
+	var n = gTransalatedPages.length / 2;
+	for (var i=0; i < n; i++) {
 		if (gTransalatedPages[i*2] == baseUrl) {
 			return gTransalatedPages[i*2+1];
 		}
@@ -305,20 +304,23 @@ function hasTranslation(baseUrl, lang) {
 }
 
 function setCookie(name,val,expireInDays) {
-    var d=new Date();
-    d.setDate(d.getDate()+expireInDays);
-    document.cookie=name+"="+escape(val)+
-    ((expireInDays === null) ? "" : ";expires="+d.toGMTString());
+	var d = new Date();
+	d.setDate(d.getDate()+expireInDays);
+	document.cookie=name+"="+escape(val)+ ((expireInDays === null) ? "" : ";expires="+d.toGMTString());
 }
 
 function getCookie(name) {
 	var c = document.cookie;
 	var start = c.indexOf(name + "=");
-	if (-1 == start) { return null; }
-    start += name.length+1;
-    var end = c.indexOf(";", start);
-    if (-1 == end) { end = c.length; }
-    return unescape(c.substring(start,end));
+	if (-1 == start) {
+		return null;
+	}
+	start += name.length+1;
+	var end = c.indexOf(";", start);
+	if (-1 == end) {
+		end = c.length;
+	}
+	return unescape(c.substring(start,end));
 }
 
 function deleteCookie(name) {
@@ -360,7 +362,9 @@ function detectUserLang() {
 function forceRedirectToLang(lang) {
 	var tmp = getBaseUrlAndLang();
 	var baseUrl = tmp[0];
-	if (!hasTranslation(baseUrl, lang)) { lang = "en"; }
+	if (!hasTranslation(baseUrl, lang)) {
+		lang = "en";
+	}
 	window.location = urlFromBaseUrlLang(baseUrl, lang);
 }
 
@@ -469,11 +473,12 @@ Language:
 </span>
 */
 function langsNavHtml() {
-	var i, userLang, langName, issel;
-	userLang = cookieOrUserLang();
+	var langName, issel, lang;
+	var userLang = cookieOrUserLang();
 	var s = '<span style="float: right; color: black; font-size: 80%;">\nLanguage:\n<select id=langSelect onchange="langChanged();">';
 
-	for (i=0; i<gLanguages.length / 2; i++) {
+	var n = gLanguages.length / 2;
+	for (var i=0; i < n; i++) {
 		issel = "";
 		lang = gLanguages[i*2];
 		if (userLang == lang) {
@@ -488,7 +493,9 @@ function langsNavHtml() {
 }
 
 function translateTabText(lang, s) {
-	if (!gTabTrans[lang]) { return s; }
+	if (!gTabTrans[lang]) {
+		return s;
+	}
 	return gTabTrans[lang][s] || s;
 }
 

@@ -13,10 +13,6 @@ import (
 	"time"
 )
 
-var (
-	analyticsCode = "UA-194516-5"
-)
-
 func writeResponse(w http.ResponseWriter, responseBody string) {
 	w.Header().Set("Content-Length", strconv.FormatInt(int64(len(responseBody)), 10))
 	io.WriteString(w, responseBody)
@@ -85,10 +81,6 @@ func main() {
 	parseCmdLineFlags()
 
 	rand.Seed(time.Now().UnixNano())
-
-	if !inProduction {
-		analyticsCode = ""
-	}
 
 	initHTTPHandlers()
 	fmt.Printf("Started runing on %s\n", httpAddr)

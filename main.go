@@ -14,6 +14,15 @@ import (
 	"time"
 )
 
+const (
+	s3Prefix = "https://kjkpub.s3.amazonaws.com/sumatrapdf/rel/"
+)
+
+var (
+	httpAddr     string
+	inProduction bool
+)
+
 func writeResponse(w http.ResponseWriter, responseBody string) {
 	w.Header().Set("Content-Length", strconv.FormatInt(int64(len(responseBody)), 10))
 	io.WriteString(w, responseBody)
@@ -23,11 +32,6 @@ func textResponse(w http.ResponseWriter, text string) {
 	w.Header().Set("Content-Type", "text/plain")
 	writeResponse(w, text)
 }
-
-var (
-	httpAddr     string
-	inProduction bool
-)
 
 func parseCmdLineFlags() {
 	flag.StringVar(&httpAddr, "addr", "127.0.0.1:5030", "HTTP server address")
@@ -57,10 +61,6 @@ func redirectIfNeeded(w http.ResponseWriter, r *http.Request) bool {
 	return true
 }
 
-const (
-	s3Prefix = "https://kjkpub.s3.amazonaws.com/sumatrapdf/rel/"
-)
-
 func fileExists(path string) bool {
 	st, err := os.Stat(path)
 	return err == nil && st.Mode().IsRegular()
@@ -71,10 +71,12 @@ func handleDl(w http.ResponseWriter, r *http.Request) {
 	name := uri[len("/dl/"):]
 	path := filepath.Join("www", "files", name)
 	if fileExists(path) {
+		//fmt.Printf("serving '%s' from local file '%s'\n", uri, path)
 		http.ServeFile(w, r, path)
 		return
 	}
 	redirectURI := s3Prefix + name
+	//fmt.Printf("serving '%s' by redirecting to '%s'\n", uri, redirectURI)
 	http.Redirect(w, r, redirectURI, http.StatusFound)
 }
 

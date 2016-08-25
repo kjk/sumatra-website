@@ -11,8 +11,8 @@ var gPrevSumatraVersion = [
 	"0.8", "0.7", "0.6", "0.5", "0.4", "0.3", "0.2"
 ];
 
-var dlPrefix = "https://kjkpub.s3.amazonaws.com/sumatrapdf/rel/";
-//var dlPrefix = "/dl/";
+//var dlPrefix = "https://kjkpub.s3.amazonaws.com/sumatrapdf/rel/";
+var dlPrefix = "/dl/";
 
 function a(href, txt) {
   return '<a href="' + href + '">' + txt + '</a>';

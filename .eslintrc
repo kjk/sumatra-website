@@ -1,0 +1,7 @@
+{
+  "rules": {
+    "max-len": [2, 120, 4],
+    "no-use-before-define": [2, { "functions": false, "classes": false }],
+    "no-underscore-dangle": 0
+  }
+}

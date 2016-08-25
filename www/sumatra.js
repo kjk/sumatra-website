@@ -11,15 +11,46 @@ var gPrevSumatraVersion = [
 	"0.8", "0.7", "0.6", "0.5", "0.4", "0.3", "0.2"
 ];
 
-var gSumZipUrl = "https://kjkpub.s3.amazonaws.com/sumatrapdf/rel/SumatraPDF-" + gSumVer + ".zip";
-var gSumExeUrl = "https://kjkpub.s3.amazonaws.com/sumatrapdf/rel/SumatraPDF-" + gSumVer + "-install.exe";
-var gSumZipName = "SumatraPDF-" + gSumVer + ".zip";
-var gSumExeName = "SumatraPDF-" + gSumVer + "-install.exe";
+var dlPrefix = "https://kjkpub.s3.amazonaws.com/sumatrapdf/rel/";
+//var dlPrefix = "/dl/";
 
-var gSumZipUrl64 = "https://kjkpub.s3.amazonaws.com/sumatrapdf/rel/SumatraPDF-" + gSumVer + "-64.zip";
-var gSumExeUrl64 = "https://kjkpub.s3.amazonaws.com/sumatrapdf/rel/SumatraPDF-" + gSumVer + "-64-install.exe";
-var gSumZipName64 = "SumatraPDF-" + gSumVer + "-64.zip";
+function a(href, txt) {
+  return '<a href="' + href + '">' + txt + '</a>';
+}
+
+function installerHref(ver) {
+  var txt = 'SumatraPDF-' + ver + '-install.exe';
+  var url = dlPrefix + txt;
+	return a(url, txt);
+}
+
+function zipHref(ver) {
+  var txt = 'SumatraPDF-' + ver + '.zip';
+  var url = dlPrefix + txt;
+	return a(url, txt);
+}
+
+function installer64Href(ver) {
+  var txt = 'SumatraPDF-' + ver + '-64-install.exe';
+  var url = dlPrefix + txt;
+	return a(url, txt);
+}
+
+function zip64Href(ver) {
+  var txt = 'SumatraPDF-' + ver + '-64.zip';
+  var url = dlPrefix + txt;
+	return a(url, txt);
+}
+
+var gSumExeName = "SumatraPDF-" + gSumVer + "-install.exe";
+var gSumZipName = "SumatraPDF-" + gSumVer + ".zip";
+var gSumExeUrl = dlPrefix + gSumExeName;
+var gSumZipUrl = dlPrefix + gSumZipName;
+
 var gSumExeName64 = "SumatraPDF-" + gSumVer + "-64-install.exe";
+var gSumZipName64 = "SumatraPDF-" + gSumVer + "-64.zip";
+var gSumExeUrl64 = dlPrefix + gSumExeName64;
+var gSumZipUrl64 = dlPrefix + gSumZipName64;
 
 // used by download-free-pdf-viewer*.html pages
 function dlHtml(s1,s2, s3) {
@@ -554,22 +585,6 @@ function navHtml() {
 
 	s += '</ul></div><div id="ddcolortabsline"> </div>';
 	return s;
-}
-
-function installerHref(ver) {
-	return '<a href="http://kjkpub.s3.amazonaws.com/sumatrapdf/rel/SumatraPDF-' + ver + '-install.exe">SumatraPDF-' + ver + '-install.exe</a>';
-}
-
-function installer64Href(ver) {
-	return '<a href="http://kjkpub.s3.amazonaws.com/sumatrapdf/rel/SumatraPDF-' + ver + '-64-install.exe">SumatraPDF-' + ver + '-64-install.exe</a>';
-}
-
-function zipHref(ver) {
-	return '<a href="http://kjkpub.s3.amazonaws.com/sumatrapdf/rel/SumatraPDF-' + ver + '.zip">SumatraPDF-' + ver + '.zip</a>';
-}
-
-function zip64Href(ver) {
-	return '<a href="http://kjkpub.s3.amazonaws.com/sumatrapdf/rel/SumatraPDF-' + ver + '-64.zip">SumatraPDF-' + ver + '-64.zip</a>';
 }
 
 function verNewerOrEqThan31(ver) {

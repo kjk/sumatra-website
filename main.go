@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"net/http"
 	"net/url"
+	"os"
 	"path/filepath"
 	"runtime"
 	"strconv"
@@ -52,8 +53,29 @@ func redirectIfNeeded(w http.ResponseWriter, r *http.Request) bool {
 		return false
 	}
 
-	http.Redirect(w, r, redirect, 302)
+	http.Redirect(w, r, redirect, http.StatusFound)
 	return true
+}
+
+const (
+	s3Prefix = "https://kjkpub.s3.amazonaws.com/sumatrapdf/rel/"
+)
+
+func fileExists(path string) bool {
+	st, err := os.Stat(path)
+	return err == nil && st.Mode().IsRegular()
+}
+
+func handleDl(w http.ResponseWriter, r *http.Request) {
+	uri := r.URL.Path
+	name := uri[len("/dl/"):]
+	path := filepath.Join("www", "files", name)
+	if fileExists(path) {
+		http.ServeFile(w, r, path)
+		return
+	}
+	redirectURI := s3Prefix + name
+	http.Redirect(w, r, redirectURI, http.StatusFound)
 }
 
 func handleMainPage(w http.ResponseWriter, r *http.Request) {
@@ -73,6 +95,7 @@ func handleMainPage(w http.ResponseWriter, r *http.Request) {
 
 func initHTTPHandlers() {
 	http.HandleFunc("/", handleMainPage)
+	http.HandleFunc("/dl/", handleDl)
 }
 
 func main() {

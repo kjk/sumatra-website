@@ -8,4 +8,4 @@ COPY www /app/www/
 
 EXPOSE 80
 
-CMD ["./sumatra_website_linux", "-addr=:80"]
+CMD ["./entrypoint.sh"]

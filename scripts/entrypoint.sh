@@ -1,16 +1,11 @@
 #!/bin/sh
 
-# sysctl -w fs.file-max=100000
-echo "/proc/sys/fs/file-max:"
-cat /proc/sys/fs/file-max
-echo "ulimit -Hn:"
-ulimit -Hn
-echo "ulimit -Sn:"
-ulimit -Sn
-echo "ulimit -Hn 11000:"
-ulimit -Hn 11000
-echo "ulimit -Sn 11000:"
-ulimit -Sn 11000
+sysctl -w fs.file-max=128000
+
+l=`cat /proc/sys/fs/file-max`
+echo "setting open files limit (ulimit -n) to {$l}"
+ulimit -Hn ${l}
+ulimit -Sn ${l}
 echo "ulimit -Sn:"
 ulimit -Sn
 

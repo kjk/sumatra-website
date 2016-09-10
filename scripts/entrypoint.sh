@@ -2,11 +2,9 @@
 
 sysctl -w fs.file-max=128000
 
-l=`cat /proc/sys/fs/file-max`
-echo "setting open files limit (ulimit -n) to {$l}"
-ulimit -Hn ${l}
-ulimit -Sn ${l}
-echo "ulimit -Sn:"
-ulimit -Sn
+l1=`cat /proc/sys/fs/file-max`
+l2=`ulimit -Sn`
+l3=`ulimit -Hn`
+echo "file limits: kernel=${l1}, soft ulimit=${l2}, hard ulimit=${l3}"
 
 ./sumatra_website_linux -addr=:80

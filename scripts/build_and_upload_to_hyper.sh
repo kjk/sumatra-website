@@ -11,5 +11,7 @@ docker build --tag kjksf/sumatra-website:latest --tag sumatra-website:latest .
 
 rm sumatra_website_linux
 
+echo "docker push"
 docker push kjksf/sumatra-website:latest
+echo "hyper pull"
 hyper pull kjksf/sumatra-website:latest

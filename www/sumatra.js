@@ -654,7 +654,3 @@ function adData() {
 	google_ad_width = 728;
 	google_ad_height = 90;
 }
-
-function doAdsense() {
-	(adsbygoogle = window.adsbygoogle || []).push({});
-}

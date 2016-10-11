@@ -1,5 +1,5 @@
 body {
-	margin: 0px 0px 20px 0px;   
+	margin: 0px 0px 20px 0px;
 	background-color: #ffffff;
 	font-family: Verdana, Arial, sans-serif;
 }
@@ -14,12 +14,12 @@ center { font-size: small; }
 #container { line-height: 140%; }
 
 #banner {
-  color: #FF4000;    
-  background-color: #fff100;    
-  text-align: left;    
-  padding-top: 15px; 
-  padding-left: 15px; 
-  padding-right: 15px; 
+  color: #FF4000;
+  background-color: #fff100;
+  text-align: left;
+  padding-top: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 #banner h1 { font-size: x-large; font-weight: bold;}
@@ -30,10 +30,10 @@ center { font-size: small; }
 .content p { color: #333; font-size: small;    font-weight: normal;    line-height: 150%;    text-align: left;    margin-bottom: 10px;}
 .content blockquote {    line-height: 150%;}
 .content li { line-height: 150%;}
-.content h2 { color: #ff4000; font-family: 'Trebuchet MS', Verdana, sans-serif; 
+.content h2 { color: #ff4000; font-family: 'Trebuchet MS', Verdana, sans-serif;
               font-size: medium; text-align: left; font-weight: bold; margin-bottom: 10px; }
 
-col, colgroup, table, tbody, td, tfoot, th, thead, tr 
+col, colgroup, table, tbody, td, tfoot, th, thead, tr
   { margin-left: auto; margin-right: auto; padding-left: 0px; padding-right: 0px;
     border-left: 0px none; border-right: 0px none; float: none; clear: none;}
 
@@ -117,8 +117,8 @@ background-color: #fff;
 .gooad {
   margin-top: 4px;
   margin-bottom: 6px;
-  margin-left:auto;
-  margin-right:auto;
+  margin-left: auto;
+  margin-right: auto;
   width: 748px; /* seems to be 728 really, adding margin for safety */
 }
 

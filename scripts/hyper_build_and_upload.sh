@@ -7,11 +7,12 @@ set -o pipefail
 go tool vet *.go
 GOOS=linux GOARCH=amd64 go build -o sumatra_website_linux
 
-docker build --tag kjksf/sumatra-website:latest --tag sumatra-website:latest .
-
+echo "running: docker build"
+docker build --tag sumatra-website:latest .
 rm sumatra_website_linux
 
-echo "docker push"
-docker push kjksf/sumatra-website:latest
-echo "hyper pull"
-hyper pull kjksf/sumatra-website:latest
+echo "running: docker save"
+docker save sumatra-website:latest | gzip | aws s3 cp - s3://kjkpub/tmp/sumatra.tar.gz
+echo "running: hyper load"
+hyper load -i $(aws s3 presign s3://kjkpub/tmp/sumatra.tar.gz)
+aws s3 rm s3://kjkpub/tmp/sumatra.tar.gz

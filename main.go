@@ -9,9 +9,13 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
-	"runtime"
 	"strconv"
+	"strings"
 	"time"
+
+	"github.com/kjk/sumatra-website/pkg/loggly"
+	"github.com/shirou/gopsutil/mem"
+	"github.com/shirou/gopsutil/process"
 )
 
 const (
@@ -21,6 +25,8 @@ const (
 var (
 	httpAddr     string
 	inProduction bool
+	logglyToken  string
+	lggly        *loggly.Client
 )
 
 func writeResponse(w http.ResponseWriter, responseBody string) {
@@ -100,15 +106,69 @@ func initHTTPHandlers() {
 	http.HandleFunc("/dl/", handleDl)
 }
 
+func findMyProcess() *process.Process {
+	pids, err := process.Pids()
+	if err != nil {
+		return nil
+	}
+	for _, pid := range pids {
+		proc, err := process.NewProcess(pid)
+		if err != nil {
+			continue
+		}
+		name, err := proc.Name()
+		if err != nil {
+			continue
+		}
+		name = strings.ToLower(name)
+		switch name {
+		case "sumatra_website_linux", "sumatra_website":
+			return proc
+		}
+	}
+	return nil
+}
+
+func logMemUsage() {
+	var args []interface{}
+	mem, err := mem.VirtualMemory()
+	if err == nil {
+		args = append(args, "mem-cached", mem.Cached, "mem-buffers", mem.Buffers, "mem-used", mem.Used, "mem-free", mem.Free)
+	}
+	proc := findMyProcess()
+	if proc != nil {
+		memInfo, err := proc.MemoryInfo()
+		if err == nil {
+			args = append(args, "proc-mem-rss", memInfo.RSS)
+		}
+	}
+	//fmt.Printf("%v\n", args)
+	err = lggly.Log(args...)
+	if err != nil {
+		fmt.Printf("lggly.Log failed with %s\n", err)
+	}
+}
+
+func logMemUsageWorker() {
+	for {
+		logMemUsage()
+		time.Sleep(time.Minute)
+	}
+}
 func main() {
-	runtime.GOMAXPROCS(runtime.NumCPU())
-
+	logglyToken = strings.TrimSpace(os.Getenv("LOGGLY_TOKEN"))
 	parseCmdLineFlags()
-
+	if logglyToken != "" {
+		fmt.Printf("Got loggly token so will send data to loggly\n")
+		lggly = loggly.New(logglyToken, "sumatra-website")
+	}
 	rand.Seed(time.Now().UnixNano())
-
+	if lggly != nil {
+		go logMemUsageWorker()
+	}
 	initHTTPHandlers()
 	fmt.Printf("Started runing on %s\n", httpAddr)
+	lggly.Log("log", fmt.Sprintf("Started running on %s", httpAddr))
 	if err := http.ListenAndServe(httpAddr, nil); err != nil {
 		fmt.Printf("http.ListendAndServer() failed with %s\n", err)
 	}

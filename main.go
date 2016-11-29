@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"sync/atomic"
 	"time"
 
 	"github.com/kjk/sumatra-website/pkg/loggly"
@@ -27,6 +28,7 @@ var (
 	inProduction bool
 	logglyToken  string
 	lggly        *loggly.Client
+	nConnections int32
 )
 
 func writeResponse(w http.ResponseWriter, responseBody string) {
@@ -73,6 +75,9 @@ func fileExists(path string) bool {
 }
 
 func handleDl(w http.ResponseWriter, r *http.Request) {
+	atomic.AddInt32(&nConnections, 1)
+	defer atomic.AddInt32(&nConnections, -1)
+
 	uri := r.URL.Path
 	name := uri[len("/dl/"):]
 	path := filepath.Join("www", "files", name)
@@ -87,6 +92,9 @@ func handleDl(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleMainPage(w http.ResponseWriter, r *http.Request) {
+	atomic.AddInt32(&nConnections, 1)
+	defer atomic.AddInt32(&nConnections, -1)
+
 	if redirectIfNeeded(w, r) {
 		return
 	}
@@ -130,7 +138,9 @@ func findMyProcess() *process.Process {
 }
 
 func logMemUsage() {
-	var args []interface{}
+	nConn := atomic.LoadInt32(&nConnections)
+	args := []interface{}{"nconnections", nConn}
+
 	mem, err := mem.VirtualMemory()
 	if err == nil {
 		args = append(args, "mem-cached", mem.Cached, "mem-buffers", mem.Buffers, "mem-used", mem.Used, "mem-free", mem.Free)

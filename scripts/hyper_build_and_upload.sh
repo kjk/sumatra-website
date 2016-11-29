@@ -13,6 +13,8 @@ rm sumatra_website_linux
 
 echo "running: docker save"
 docker save sumatra-website:latest | gzip | aws s3 cp - s3://kjkpub/tmp/sumatra.tar.gz
+echo "sleeping for 5 secs"
+sleep 5
 echo "running: hyper load"
 hyper load -i $(aws s3 presign s3://kjkpub/tmp/sumatra.tar.gz)
 aws s3 rm s3://kjkpub/tmp/sumatra.tar.gz

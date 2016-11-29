@@ -161,7 +161,7 @@ func main() {
 	rand.Seed(time.Now().UnixNano())
 
 	if logglyToken != "" {
-		fmt.Printf("Got loggly token so will send data to loggly\n")
+		fmt.Printf("Got loggly token '%s' so will send data to loggly\n", logglyToken)
 		lggly = loggly.New(logglyToken, "sumatra-website")
 		if inProduction {
 			lggly.Tag("production")

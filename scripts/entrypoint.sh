@@ -7,4 +7,4 @@ l2=`ulimit -Sn`
 l3=`ulimit -Hn`
 echo "file limits: kernel=${l1}, soft ulimit=${l2}, hard ulimit=${l3}"
 
-./sumatra_website_linux -addr=:80
+./sumatra_website_linux -production=true -addr=:80

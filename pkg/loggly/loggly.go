@@ -123,6 +123,9 @@ func (c *Client) Write(b []byte) (int, error) {
 
 // Log logs key/value pairs
 func (c *Client) Log(args ...interface{}) error {
+	if c == nil {
+		return nil
+	}
 	n := len(args)
 	if n == 0 {
 		return errors.New("Didn't provide any arguments")

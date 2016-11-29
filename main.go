@@ -158,17 +158,23 @@ func logMemUsageWorker() {
 func main() {
 	logglyToken = strings.TrimSpace(os.Getenv("LOGGLY_TOKEN"))
 	parseCmdLineFlags()
+	rand.Seed(time.Now().UnixNano())
+
 	if logglyToken != "" {
 		fmt.Printf("Got loggly token so will send data to loggly\n")
 		lggly = loggly.New(logglyToken, "sumatra-website")
-	}
-	rand.Seed(time.Now().UnixNano())
-	if lggly != nil {
+		if inProduction {
+			lggly.Tag("production")
+		} else {
+			lggly.Tag("dev")
+		}
 		go logMemUsageWorker()
 	}
+
 	initHTTPHandlers()
-	fmt.Printf("Started runing on %s\n", httpAddr)
-	lggly.Log("log", fmt.Sprintf("Started running on %s", httpAddr))
+	msg := fmt.Sprintf("Started running on %s, inProduction: %v", httpAddr, inProduction)
+	fmt.Printf("%s\n", msg)
+	lggly.Log("log", msg)
 	if err := http.ListenAndServe(httpAddr, nil); err != nil {
 		fmt.Printf("http.ListendAndServer() failed with %s\n", err)
 	}

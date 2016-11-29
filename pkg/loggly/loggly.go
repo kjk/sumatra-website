@@ -180,7 +180,7 @@ func (c *Client) Flush() error {
 		return err
 	}
 
-	defer res.Body.Close()
+	res.Body.Close()
 
 	return err
 }

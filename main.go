@@ -142,8 +142,8 @@ func logMemUsage() {
 			args = append(args, "proc-mem-rss", memInfo.RSS)
 		}
 	}
-	//fmt.Printf("%v\n", args)
 	err = lggly.Log(args...)
+	fmt.Printf("sent to loggly: %v\n", args)
 	if err != nil {
 		fmt.Printf("lggly.Log failed with %s\n", err)
 	}

@@ -2,3 +2,4 @@ sumatra_website
 sumatra_website_linux
 *.zip
 *.exe
+scripts/hyper_update_with_loggly.sh

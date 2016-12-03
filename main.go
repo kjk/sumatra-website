@@ -24,11 +24,12 @@ const (
 )
 
 var (
-	httpAddr     string
-	inProduction bool
-	logglyToken  string
-	lggly        *loggly.Client
-	nConnections int32
+	httpAddr               string
+	inProduction           bool
+	logglyToken            string
+	lggly                  *loggly.Client
+	nConcurrentConnections int32
+	nTotalConnections      int64
 )
 
 func writeResponse(w http.ResponseWriter, responseBody string) {
@@ -75,8 +76,10 @@ func fileExists(path string) bool {
 }
 
 func handleDl(w http.ResponseWriter, r *http.Request) {
-	atomic.AddInt32(&nConnections, 1)
-	defer atomic.AddInt32(&nConnections, -1)
+	atomic.AddInt32(&nConcurrentConnections, 1)
+	defer atomic.AddInt32(&nConcurrentConnections, -1)
+
+	atomic.AddInt64(&nTotalConnections, 1)
 
 	uri := r.URL.Path
 	name := uri[len("/dl/"):]
@@ -92,8 +95,8 @@ func handleDl(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleMainPage(w http.ResponseWriter, r *http.Request) {
-	atomic.AddInt32(&nConnections, 1)
-	defer atomic.AddInt32(&nConnections, -1)
+	atomic.AddInt32(&nConcurrentConnections, 1)
+	defer atomic.AddInt32(&nConcurrentConnections, -1)
 
 	if redirectIfNeeded(w, r) {
 		return
@@ -104,6 +107,9 @@ func handleMainPage(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
+
+	atomic.AddInt64(&nTotalConnections, 1)
+
 	fileName := parsed.Path
 	path := filepath.Join("www", fileName)
 	http.ServeFile(w, r, path)
@@ -138,8 +144,10 @@ func findMyProcess() *process.Process {
 }
 
 func logMemUsage() {
-	nConn := atomic.LoadInt32(&nConnections)
-	args := []interface{}{"nconnections", nConn}
+	nConn := atomic.LoadInt32(&nConcurrentConnections)
+	nTotalConn := atomic.LoadInt64(&nTotalConnections)
+
+	args := []interface{}{"ntotalconnections", nTotalConn, "nconcurrentconnections", nConn}
 
 	mem, err := mem.VirtualMemory()
 	if err == nil {
@@ -152,19 +160,23 @@ func logMemUsage() {
 			args = append(args, "proc-mem-rss", memInfo.RSS)
 		}
 	}
-	err = lggly.Log(args...)
-	fmt.Printf("sent to loggly: %v\n", args)
-	if err != nil {
-		fmt.Printf("lggly.Log failed with %s\n", err)
+	if lggly != nil {
+		err = lggly.Log(args...)
+		if err != nil {
+			fmt.Printf("lggly.Log failed with %s\n", err)
+		}
 	}
+
+	fmt.Printf("%v\n", args)
 }
 
 func logMemUsageWorker() {
 	for {
 		logMemUsage()
-		time.Sleep(time.Minute)
+		time.Sleep(time.Minute * 10)
 	}
 }
+
 func main() {
 	logglyToken = strings.TrimSpace(os.Getenv("LOGGLY_TOKEN"))
 	parseCmdLineFlags()
@@ -178,8 +190,8 @@ func main() {
 		} else {
 			lggly.Tag("dev")
 		}
-		go logMemUsageWorker()
 	}
+	go logMemUsageWorker()
 
 	initHTTPHandlers()
 	msg := fmt.Sprintf("Started running on %s, inProduction: %v", httpAddr, inProduction)

@@ -115,9 +115,76 @@ func handleMainPage(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, path)
 }
 
+var bitlyLinks = []string{
+	"https://smallpdf.com/compress-pdf",
+	"http://bit.ly/2hfrJOm",
+
+	"https://smallpdf.com/ppt-to-pdf",
+	"http://bit.ly/2hgp3Mh",
+
+	"https://smallpdf.com/pdf-to-ppt",
+	"http://bit.ly/2gR7s0k",
+
+	"https://smallpdf.com/jpg-to-pdf",
+	"http://bit.ly/2h1f127",
+
+	"https://smallpdf.com/pdf-to-jpg",
+	"http://bit.ly/2gAZGoo",
+
+	"https://smallpdf.com/excel-to-pdf",
+	"http://bit.ly/2gR8CJs",
+
+	"https://smallpdf.com/pdf-to-excel",
+	"http://bit.ly/2h43L5K",
+
+	"https://smallpdf.com/word-to-pdf",
+	"http://bit.ly/2gR3kxF",
+
+	"https://smallpdf.com/pdf-to-word",
+	"http://bit.ly/2g8QzKN",
+
+	"https://smallpdf.com/merge-pdf",
+	"http://bit.ly/2g8YrvJ",
+
+	"https://smallpdf.com/split-pdf",
+	"http://bit.ly/2hgrfDq",
+
+	"https://smallpdf.com/rotate-pdf",
+	"http://bit.ly/2g93tbJ",
+
+	"https://smallpdf.com/unlock-pdf",
+	"http://bit.ly/2gAWkBQ",
+
+	"https://smallpdf.com/protect-pdf",
+	"http://bit.ly/2g8eTBu",
+}
+
+func findSmallPdfDst(s string) string {
+	n := len(bitlyLinks) / 2
+	for i := 0; i < n; i++ {
+		l := bitlyLinks[i*2]
+		if strings.HasSuffix(l, s) {
+			return bitlyLinks[i*2+1]
+		}
+	}
+	return ""
+}
+
+func handleGoTo(w http.ResponseWriter, r *http.Request) {
+	dst := r.URL.Path[len("/go-to/"):]
+	fmt.Printf("url: %s, goto: %s\n", r.URL.Path, dst)
+	redirect := findSmallPdfDst(dst)
+	if redirect == "" {
+		// shouldn't happen
+		redirect = "/pdf-tools.html"
+	}
+	http.Redirect(w, r, redirect, http.StatusFound)
+}
+
 func initHTTPHandlers() {
 	http.HandleFunc("/", handleMainPage)
 	http.HandleFunc("/dl/", handleDl)
+	http.HandleFunc("/go-to/", handleGoTo)
 }
 
 func findMyProcess() *process.Process {

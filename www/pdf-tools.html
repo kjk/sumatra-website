@@ -229,6 +229,7 @@
               <h2 class="app-title">Protect PDF</h2>
             </a>
           </li>
+
         </ul>
       </div>
     </div>
@@ -243,5 +244,44 @@
   ga('send', 'pageview');
 </script>
 
+<script>
+  function getRandomInt(max) {
+    var min = 0;
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min;
+  }
+
+  function randomizeArray(arr) {
+    var res = [];
+    while (arr.length > 0) {
+      var n = getRandomInt(arr.length);
+      var el = arr.splice(n, 1)[0];
+      res.push(el);
+    }
+    return res;
+  }
+
+  var ul = document.getElementById("list-of-tools");
+  var newUl = ul.cloneNode(false);
+
+  var lis = [];
+  var n = ul.childNodes.length;
+  for (var i = 0; i < n; i++) {
+    var el = ul.childNodes[i];
+      if (el.nodeName === 'LI') {
+        lis.push(el);
+      }
+  }
+
+  var newLis = randomizeArray(lis);
+  n = newLis.length;
+  for (var i = 0; i < n; i++) {
+    var el = newLis[i];
+    newUl.appendChild(el);
+  }
+
+  ul.parentNode.replaceChild(newUl, ul);
+
+</script>
 </body>
 </html>

@@ -1,16 +1,23 @@
 package main
 
 import (
+	"bufio"
+	"bytes"
+	"encoding/json"
 	"flag"
 	"fmt"
+	"html/template"
 	"io"
 	"math/rand"
 	"net/http"
 	"net/url"
 	"os"
+	"os/user"
 	"path/filepath"
+	"sort"
 	"strconv"
 	"strings"
+	"sync"
 	"sync/atomic"
 	"time"
 
@@ -159,6 +166,118 @@ var bitlyLinks = []string{
 	"http://bit.ly/2g8eTBu",
 }
 
+func userHomeDir() string {
+	// user.Current() returns nil if cross-compiled e.g. on mac for linux
+	if usr, _ := user.Current(); usr != nil {
+		return usr.HomeDir
+	}
+	return os.Getenv("HOME")
+}
+
+func expandTildeInPath(s string) string {
+	if strings.HasPrefix(s, "~") {
+		return userHomeDir() + s[1:]
+	}
+	return s
+}
+
+func pathExists(path string) bool {
+	_, err := os.Stat(path)
+	return err == nil
+}
+
+func getDataDir() string {
+	for _, dir := range []string{"~/data/sumatra-website", "/data"} {
+		dir = expandTildeInPath(dir)
+		if pathExists(dir) {
+			return dir
+		}
+	}
+	return ""
+}
+
+func statsFilePath() string {
+	return filepath.Join(getDataDir(), "stats.json")
+}
+
+// types:
+// tc - tool click
+
+type statToolClick struct {
+	Type      string    `json:"t"`
+	Timestamp time.Time `json:"ts"`
+	Where     string    `json:"w"`
+}
+
+var (
+	statsFile   *os.File
+	muStatsFile sync.Mutex
+	stats       map[string]int
+)
+
+func init() {
+	stats = make(map[string]int)
+}
+
+func logIfErr(err error) {
+	if err != nil {
+		fmt.Printf("error: '%s'\n", err)
+	}
+}
+
+func openStatsFile() {
+	var err error
+	statsFile, err = os.OpenFile(statsFilePath(), os.O_CREATE|os.O_APPEND|os.O_RDWR, 0644)
+	logIfErr(err)
+}
+
+func readStats() {
+	f, err := os.Open(statsFilePath())
+	if err != nil {
+		logIfErr(err)
+		return
+	}
+	defer f.Close()
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		s := scanner.Text()
+		s = strings.TrimSpace(s)
+		var st statToolClick
+		err = json.Unmarshal([]byte(s), &st)
+		if err != nil {
+			logIfErr(err)
+			continue
+		}
+		stats[st.Where]++
+	}
+}
+
+func recordToolClick(where string) {
+	muStatsFile.Lock()
+	defer muStatsFile.Unlock()
+
+	stats[where]++
+	if statsFile == nil {
+		return
+	}
+	e := &statToolClick{
+		Type:      "tc",
+		Timestamp: time.Now(),
+		Where:     where,
+	}
+	d, err := json.Marshal(e)
+	if err != nil {
+		logIfErr(err)
+		return
+	}
+	_, err = statsFile.Write(d)
+	logIfErr(err)
+	_, err = statsFile.WriteString("\n")
+	logIfErr(err)
+	err = statsFile.Sync()
+	logIfErr(err)
+}
+
 func findSmallPdfDst(s string) string {
 	n := len(bitlyLinks) / 2
 	for i := 0; i < n; i++ {
@@ -172,19 +291,100 @@ func findSmallPdfDst(s string) string {
 
 func handleGoTo(w http.ResponseWriter, r *http.Request) {
 	dst := r.URL.Path[len("/go-to/"):]
-	fmt.Printf("url: %s, goto: %s\n", r.URL.Path, dst)
 	redirect := findSmallPdfDst(dst)
 	if redirect == "" {
 		// shouldn't happen
 		redirect = "/pdf-tools.html"
+	} else {
+		recordToolClick(dst)
 	}
 	http.Redirect(w, r, redirect, http.StatusFound)
+}
+
+type whereCount struct {
+	Where string
+	Count int
+}
+
+type whereCountByCount []whereCount
+
+func (a whereCountByCount) Len() int { return len(a) }
+func (a whereCountByCount) Swap(i, j int) {
+	a[i], a[j] = a[j], a[i]
+}
+func (a whereCountByCount) Less(i, j int) bool {
+	return a[j].Count < a[i].Count
+}
+
+func getSortedStats() []whereCount {
+	muStatsFile.Lock()
+	defer muStatsFile.Unlock()
+	var res []whereCount
+	for where, count := range stats {
+		res = append(res, whereCount{where, count})
+	}
+	sort.Sort(whereCountByCount(res))
+	return res
+}
+
+var (
+	statsTmpl = `<!doctype html><html><body>
+		<div>Stats of what people click</div>
+		<table>
+			<thead>
+				<tr>
+					<td>Where</td>
+					<td>Count</td>
+				</tr>
+			</thead>
+
+			<tbody>
+				{{ range .Stats }}
+				<tr>
+						<td>{{ .Where }}</td>
+						<td>{{ .Count }}</td>
+				</tr>
+				{{ end }}
+			<tbody>
+		</table>
+	</body></html>`
+)
+
+func execTemplateString(w http.ResponseWriter, templateString string, v interface{}) {
+	tmpl := template.New("stats")
+	tmpl, err := tmpl.Parse(templateString)
+	if err != nil {
+		logIfErr(err)
+		return
+	}
+	var buf bytes.Buffer
+	if err := tmpl.ExecuteTemplate(&buf, "stats", v); err != nil {
+		logIfErr(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// at this point we ignore error
+	w.Header().Set("Content-Length", strconv.Itoa(len(buf.Bytes())))
+	w.Write(buf.Bytes())
+}
+
+func handleSeeStats(w http.ResponseWriter, r *http.Request) {
+	//fmt.Printf("handlSeeStats\n")
+	stats := getSortedStats()
+	v := struct {
+		Stats []whereCount
+	}{
+		Stats: stats,
+	}
+	execTemplateString(w, statsTmpl, v)
 }
 
 func initHTTPHandlers() {
 	http.HandleFunc("/", handleMainPage)
 	http.HandleFunc("/dl/", handleDl)
 	http.HandleFunc("/go-to/", handleGoTo)
+	http.HandleFunc("/see-stats", handleSeeStats)
 }
 
 func findMyProcess() *process.Process {
@@ -248,6 +448,9 @@ func main() {
 	logglyToken = strings.TrimSpace(os.Getenv("LOGGLY_TOKEN"))
 	parseCmdLineFlags()
 	rand.Seed(time.Now().UnixNano())
+
+	readStats()
+	openStatsFile()
 
 	if logglyToken != "" {
 		fmt.Printf("Got loggly token '%s' so will send data to loggly\n", logglyToken)

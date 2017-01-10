@@ -37,6 +37,8 @@ var (
 	lggly                  *loggly.Client
 	nConcurrentConnections int32
 	nTotalConnections      int64
+	nTotalDownloads        int64
+	disableLocalDownloads  bool = true
 )
 
 func writeResponse(w http.ResponseWriter, responseBody string) {
@@ -93,8 +95,11 @@ func handleDl(w http.ResponseWriter, r *http.Request) {
 	path := filepath.Join("www", "files", name)
 	if fileExists(path) {
 		//fmt.Printf("serving '%s' from local file '%s'\n", uri, path)
-		http.ServeFile(w, r, path)
-		return
+		atomic.AddInt64(&nTotalDownloads, 1)
+		if !disableLocalDownloads {
+			http.ServeFile(w, r, path)
+			return
+		}
 	}
 	redirectURI := s3Prefix + name
 	//fmt.Printf("serving '%s' by redirecting to '%s'\n", uri, redirectURI)
@@ -413,8 +418,13 @@ func findMyProcess() *process.Process {
 func logMemUsage() {
 	nConn := atomic.LoadInt32(&nConcurrentConnections)
 	nTotalConn := atomic.LoadInt64(&nTotalConnections)
+	nTotalDls := atomic.LoadInt64(&nTotalDownloads)
 
-	args := []interface{}{"ntotalconnections", nTotalConn, "nconcurrentconnections", nConn}
+	args := []interface{}{
+		"ntotalconnections", nTotalConn,
+		"ntotaldls", nTotalDls,
+		"nconcurrentconnections", nConn,
+	}
 
 	mem, err := mem.VirtualMemory()
 	if err == nil {

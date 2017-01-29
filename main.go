@@ -385,11 +385,24 @@ func handleSeeStats(w http.ResponseWriter, r *http.Request) {
 	execTemplateString(w, statsTmpl, v)
 }
 
-func initHTTPHandlers() {
-	http.HandleFunc("/", handleMainPage)
-	http.HandleFunc("/dl/", handleDl)
-	http.HandleFunc("/go-to/", handleGoTo)
-	http.HandleFunc("/see-stats", handleSeeStats)
+// https://blog.gopheracademy.com/advent-2016/exposing-go-on-the-internet/
+func initHTTPServer() *http.Server {
+	mux := &http.ServeMux{}
+
+	mux.HandleFunc("/", handleMainPage)
+	mux.HandleFunc("/dl/", handleDl)
+	mux.HandleFunc("/go-to/", handleGoTo)
+	mux.HandleFunc("/see-stats", handleSeeStats)
+
+	srv := &http.Server{
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 5 * time.Second,
+		// TODO: 1.8 only
+		// IdleTimeout:  120 * time.Second,
+		Handler: mux,
+	}
+	// TODO: track connections and their state
+	return srv
 }
 
 func findMyProcess() *process.Process {
@@ -473,11 +486,12 @@ func main() {
 	}
 	go logMemUsageWorker()
 
-	initHTTPHandlers()
+	srv := initHTTPServer()
+	srv.Addr = httpAddr
 	msg := fmt.Sprintf("Started running on %s, inProduction: %v", httpAddr, inProduction)
 	fmt.Printf("%s\n", msg)
 	lggly.Log("log", msg)
-	if err := http.ListenAndServe(httpAddr, nil); err != nil {
+	if err := srv.ListenAndServe(); err != nil {
 		fmt.Printf("http.ListendAndServer() failed with %s\n", err)
 	}
 	fmt.Printf("Exited\n")

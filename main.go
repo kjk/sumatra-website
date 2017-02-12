@@ -3,7 +3,9 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"crypto/tls"
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"html/template"
@@ -21,9 +23,12 @@ import (
 	"sync/atomic"
 	"time"
 
+	"golang.org/x/crypto/acme/autocert"
+
 	"github.com/kjk/sumatra-website/pkg/loggly"
 	"github.com/shirou/gopsutil/mem"
 	"github.com/shirou/gopsutil/process"
+	netcontext "golang.org/x/net/context"
 )
 
 const (
@@ -38,7 +43,7 @@ var (
 	nConcurrentConnections int32
 	nTotalConnections      int64
 	nTotalDownloads        int64
-	disableLocalDownloads  bool = true
+	disableLocalDownloads  = true
 )
 
 func writeResponse(w http.ResponseWriter, responseBody string) {
@@ -386,7 +391,7 @@ func handleSeeStats(w http.ResponseWriter, r *http.Request) {
 }
 
 // https://blog.gopheracademy.com/advent-2016/exposing-go-on-the-internet/
-func initHTTPServer() *http.Server {
+func makeHTTPServer() *http.Server {
 	mux := &http.ServeMux{}
 
 	mux.HandleFunc("/", handleMainPage)
@@ -467,6 +472,13 @@ func logMemUsageWorker() {
 	}
 }
 
+func hostPolicy(ctx netcontext.Context, host string) error {
+	if strings.HasSuffix(host, "sumatrapdfreader.org") {
+		return nil
+	}
+	return errors.New("acme/autocert: only *.sumatrapdfreader.org hosts are allowed")
+}
+
 func main() {
 	logglyToken = strings.TrimSpace(os.Getenv("LOGGLY_TOKEN"))
 	parseCmdLineFlags()
@@ -484,9 +496,21 @@ func main() {
 			lggly.Tag("dev")
 		}
 	}
-	go logMemUsageWorker()
+	// go logMemUsageWorker()
 
-	srv := initHTTPServer()
+	if inProduction {
+		srv := makeHTTPServer()
+		m := autocert.Manager{
+			Prompt:     autocert.AcceptTOS,
+			HostPolicy: hostPolicy,
+		}
+		srv.Addr = ":443"
+		srv.TLSConfig = &tls.Config{GetCertificate: m.GetCertificate}
+		fmt.Printf("Started runing HTTPS on %s\n", srv.Addr)
+		go srv.ListenAndServeTLS("", "")
+	}
+
+	srv := makeHTTPServer()
 	srv.Addr = httpAddr
 	msg := fmt.Sprintf("Started running on %s, inProduction: %v", httpAddr, inProduction)
 	fmt.Printf("%s\n", msg)

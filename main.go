@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"crypto/tls"
 	"encoding/json"
 	"errors"
@@ -28,7 +29,6 @@ import (
 	"github.com/kjk/sumatra-website/pkg/loggly"
 	"github.com/shirou/gopsutil/mem"
 	"github.com/shirou/gopsutil/process"
-	netcontext "golang.org/x/net/context"
 )
 
 const (
@@ -43,7 +43,7 @@ var (
 	nConcurrentConnections int32
 	nTotalConnections      int64
 	nTotalDownloads        int64
-	disableLocalDownloads  = true
+	disableLocalDownloads  = false
 )
 
 func writeResponse(w http.ResponseWriter, responseBody string) {
@@ -98,16 +98,14 @@ func handleDl(w http.ResponseWriter, r *http.Request) {
 	uri := r.URL.Path
 	name := uri[len("/dl/"):]
 	path := filepath.Join("www", "files", name)
-	if fileExists(path) {
-		//fmt.Printf("serving '%s' from local file '%s'\n", uri, path)
+	if !disableLocalDownloads && fileExists(path) {
 		atomic.AddInt64(&nTotalDownloads, 1)
-		if !disableLocalDownloads {
-			http.ServeFile(w, r, path)
-			return
-		}
+		//fmt.Printf("serving name: '%s' uri: '%s' from local file '%s'\n", name, uri, path)
+		http.ServeFile(w, r, path)
+		return
 	}
 	redirectURI := s3Prefix + name
-	//fmt.Printf("serving '%s' by redirecting to '%s'\n", uri, redirectURI)
+	//fmt.Printf("serving  name: '%s' uri: '%s' by redirecting to '%s' because %s doesn't exist\n", name, uri, redirectURI, path)
 	http.Redirect(w, r, redirectURI, http.StatusFound)
 }
 
@@ -472,7 +470,7 @@ func logMemUsageWorker() {
 	}
 }
 
-func hostPolicy(ctx netcontext.Context, host string) error {
+func hostPolicy(ctx context.Context, host string) error {
 	if strings.HasSuffix(host, "sumatrapdfreader.org") {
 		return nil
 	}

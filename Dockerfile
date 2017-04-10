@@ -10,4 +10,4 @@ COPY www /app/www/
 
 EXPOSE 80 443
 
-CMD ["./entrypoint.sh"]
+CMD ["/app/entrypoint.sh"]

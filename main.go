@@ -72,6 +72,30 @@ func fileExists(path string) bool {
 	return err == nil && st.Mode().IsRegular()
 }
 
+// we used to have translated pages like /free-pdf-reader-bg.html
+// but I had to remove them. We want to redirect them to /free-pdf-reader.html
+// if that is a valid file.
+// This function returns a url to redirect to or "" if can't find valid redirect
+func untranslatedURLRedirect(uri string) string {
+	// remove '.html' from the end
+	newURI := strings.TrimSuffix(uri, ".html")
+	if newURI == uri {
+		return ""
+	}
+	// check it ends with '-xx'
+	n := len(newURI)
+	if n < 4 || uri[n-3] != '-' {
+		return ""
+	}
+	newURI = newURI[:n-3] + ".html"
+	path := filepath.Join("www", newURI)
+	if fileExists(path) {
+		fmt.Printf("%s => %s\n", uri, newURI)
+		return newURI
+	}
+	return ""
+}
+
 func handleDl(w http.ResponseWriter, r *http.Request) {
 	uri := r.URL.Path
 	name := uri[len("/dl/"):]
@@ -97,8 +121,17 @@ func handleMainPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fileName := parsed.Path
-	path := filepath.Join("www", fileName)
+	uri := parsed.Path
+	path := filepath.Join("www", uri)
+
+	if !fileExists(path) {
+		newURI := untranslatedURLRedirect(uri)
+		if newURI != "" {
+			http.Redirect(w, r, newURI, http.StatusFound)
+			return
+		}
+	}
+
 	http.ServeFile(w, r, path)
 }
 
@@ -118,9 +151,8 @@ func makeHTTPServer() *http.Server {
 	srv := &http.Server{
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 5 * time.Second,
-		// TODO: 1.8 only
-		// IdleTimeout:  120 * time.Second,
-		Handler: mux,
+		IdleTimeout:  120 * time.Second,
+		Handler:      mux,
 	}
 	// TODO: track connections and their state
 	return srv

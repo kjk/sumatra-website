@@ -506,6 +506,7 @@ Language:
 function langsNavHtml() {
 	var langName, issel, lang;
 	var userLang = cookieOrUserLang();
+	// eslint-disable-next-line
 	var s = '<span style="float: right; color: black; font-size: 80%;">\nLanguage:\n<select id=langSelect onchange="langChanged();">';
 
 	var n = gLanguages.length / 2;
@@ -531,7 +532,7 @@ function translateTabText(lang, s) {
 }
 
 function urlFromBaseUrlLang(baseUrl, lang) {
-	if (baseUrl == "/forum_sumatra/" || baseUrl == "https://muut.com/sumatrapdf") {
+	if (baseUrl == "/forum_sumatra/" || baseUrl == "/forum.html") {
 		return baseUrl;
 	}
 	if (hasTranslation(baseUrl, lang)) {
@@ -548,9 +549,8 @@ function urlFromBaseUrlLang(baseUrl, lang) {
 			<li><a href="news.html" title="News"><span>Новости</span></a></li>
 			<li><a href="manual.html" title="Manual"><span>Руководство пользователя</span></a></li>
 			<li><a href="download-free-pdf-viewer.html" title="Download"><span>Загрузка</span></a></li>
-			<li><a href="https://github.com/sumatrapdfreader/sumatrapdf/wiki/Contribute-code" title="Contribute"><span>Сотрудничество</span></a></li>
 			<li><a href="translations.html" title="Translations"><span>Переводы</span></a></li>
-			<li><a href="https://muut.com/sumatrapdf" title="Forums"><span>Форум</span></a></li>
+			<li><a href="/forum.html" title="Forums"><span>Форум</span></a></li>
 		</ul>
 	</div>
 	<div id="ddcolortabsline"> </div>
@@ -569,7 +569,7 @@ function navHtml() {
 		["news", "Version History"],
 		//["develop", "Contribute"],
 		//["translations", "Translations"],
-		["https://muut.com/sumatrapdf", "Forums"]];
+		["forum", "Discussion Forum"]];
 
 	for (i=0; i<baseUrls.length; i++) {
 		currUrl = baseUrls[i][0];

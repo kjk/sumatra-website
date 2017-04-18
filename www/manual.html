@@ -165,136 +165,25 @@ table.shortcuts {
     </p>
 
     <h2 id="manual-cmd-line">Command-line arguments</h2>
-
-    For most complete documentation, read <a href="https://github.com/sumatrapdfreader/sumatrapdf/wiki/Command-line-arguments">this page</a>.
-
     <p>
-    Command-line arguments:
-    <table class="shortcuts" style="font-size: 90%; line-height: 105%">
-      <tr><td align="right"><b>-page $pageno</b></td>
-        <td>&nbsp;open PDF at a given page</td></tr>
-      <tr><td align="right"><b>-named-dest $dest</b></td>
-        <td>&nbsp;open PDF at a specified named destination</td></tr>
-      <tr><td align="right"><b>-lang $language</b></td>
-        <td>&nbsp;set user interface language. $language is a two-letter language code e.g. "en", "de"</td></tr>
-
-<!--
-      <tr><td align="right"><b>-title $title</b></td>
-        <td>&nbsp;set the window title</td></tr>
--->
-
-      <tr><td align="right"><b>-restrict</b></td>
-        <td>&nbsp;run in <a href="#manual-restricted">restricted mode</a>.</td></tr>
-      <tr><td align="right"><b>-presentation $file.pdf</b></td>
-        <td>&nbsp;opens a PDF file in presentation (full-screen) mode</td></tr>
-      <tr><td align="right"><b>-register-for-pdf</b></td>
-        <td>&nbsp;forces registering Sumatra as a default reader for PDF files and exits</td></tr>
-
-      <!-- those are replased by settings file
-      <tr><td align="right"><b>-esc-to-exit</b></td>
-        <td>&nbsp;if given, ESC key will exit the program. It's persisted in settings file, so only needs to be provided once</td></tr>
-      <tr><td align="right"><b>-bg-color $color</b></td>
-        <td>&nbsp;change the yellow background color to a provided color in hex format (e.g. 0xffff00)</td></tr>
-      <tr><td align="right"><b>-invert-colors</b></td>
-        <td>&nbsp;will invert colors in the PDF (e.g. white would become black and black would become white)</td>
-      </tr>
-      <tr><td align="right"><b>-manga-mode $mode</b></td>
-        <td>&nbsp;enable display of manga comic books. $mode can be 1, true, 0, false</td>
-      </tr>
-      -->
-
-    </table>
-    </p>
-
-<!--
-    <p>Note: <b>-esc-to-exit</b> and <b>-bg-color</b> options change the defaults and persist
-    them in sumatrapdfprefs.dat file (in %appdata%\SumatraPDF directory if installed, in the
-    same directory as executable in portable mode). To revert back to defaults, you can
-    delete sumatrapdfprefs.dat file.</p>
--->
-
-    <p>Printing related cmd-line arguments:
-    <table class="shortcuts" style="font-size: 90%; line-height: 105%">
-      <tr><td align="right"><b>-print-to-default $file.pdf</b></td>
-        <td>&nbsp;prints a PDF file on a default printer</td></tr>
-      <tr><td align="right"><b>-print-to $printer_name $file.pdf</b></td>
-        <td>&nbsp;prints a PDF on a given printer</td></tr>
-      <tr><td align="right"><b>-print-dialog $file.pdf</b></td>
-        <td>&nbsp;opens a PDF file and shows a print dialog to select printer and printing options</td></tr>
-      <tr><td align="right"><b>-exit-on-print</b></td>
-        <td>&nbsp;when -print-to-default or -print-to is used, will exit after printing</td></tr>
-    </table>
+    For most complete documentation, read <a href="https://www.notion.so/Command-line-arguments-0c53a79e91394eccb7535ef6fed0678e">this page</a>.
     </p>
 
     <h2 id="manual-latex">LaTeX preview support</h2>
-    <p> Sumatra has built-in support for easy previewing of LaTeX documents.
-        Read <a href="http://william.famille-blum.org/blog/static.php?page=static081010-000413">this page</a> for more information and detailed instructions on how to configure various text editors
-        to integrate with Sumatra's preview functionality.
+    <p> Sumatra has built-in support for <a href="https://www.notion.so/Use-Sumatra-as-a-pre-viewer-for-LaTeX-editors-06174d1d7be24e10966656261c70ed7f">easy previewing of LaTeX documents</a>.
     </p>
 
     <h2 id="manual-restricted">Running in restricted mode</h2>
     <p>A restricted mode is useful if you want to use SumatraPDF as a bundled viewer
-    for your program's documentation or in kiosk mode. In restricted mode some actions
-    that are not appropriate in such context are disabled:</p>
-    <ul>
-      <li>opening new files</li>
-      <li>launching URLs from with PDF document</li>
-      <li>text and image selection</li>
-      <li>printing</li>
-      <li>changing default settings</li>
-      <li>saving to disk</li>
-      <li>automatic and manual update checks</li>
-      <li>a history of recently opened files</li>
-      <li>TeX support</li>
-      <li>registering as a default PDF viewer</li>
-      <li>opening with Adobe Acrobat</li>
-      <li>e-mailing PDF</li>
-    </ul>
+    for your program's documentation or in kiosk mode. Read <a href="https://www.notion.so/Configure-Sumatra-for-restricted-use-dde404d76f3a4bb1ad3f8fd310bb8e80">more about restricted mode</a>.
 
-<!--
-    <h2 id="manual-notes">Notes</h2>
-
-    <p>If "Remember settings for each document" is turned on and a PDF is later opened again,
-    Sumatra PDF will return to the page shown when it was closed. Settings are not only
-    stored for those 10 files shown in the "File" menu - but resuming will not work
-    if the file has been moved in the meantime</p>
-
-    <p>Some settings (e.g. fullscreen) are saved as defaults without a GUI option,
-      when SumatraPDF is closed without any document open.</p>
--->
     <h2 id="manual-limitations">Known limitations</h2>
 
     <p>Editing interactive forms and adding comments is not implemented.</p>
 
     <h2 id="more-docs">More documentation</h2>
 
-    <p>You can find more documentation at <a href="https://github.com/sumatrapdfreader/sumatrapdf/wiki">this page</a>.</p>
-<!--
-    <h2 id="manual-browser">Disable viewing PDF files directly in web browser (IE and Firefox)</h2>
-    Adobe Acrobat also comes with Internet Explorer and Firefox plugin
-    which makes it take over PDF files downloaded via browser and display
-    them directly in the browser. <p>This is not always a desired behaviour
-    and you can use Sumatra as the default PDF viewer in both IE and Firefox,
-    without completely uninstalling Adobe Acrobat. <p>Here are the steps (based
-    on <a href="http://notlost.blogspot.com/2007/06/switching-to-sumatra-pdf-reader.html">
-    this blog post</a>):
-    <ul>
-        <li>Launch Adobe Acrobat</li>
-        <li>Select Edit/Preferences</li>
-        <li>Select Internet</li>
-        <li>Uncheck Display PDF in browser</li>
-        <li>Click OK</li>
-        <li>Launch Sumatra PDF viewer</li>
-        <li>Select menu Setting/Options... and click "Make SumatraPDF my main PDF reader" button</li>
-    </ul>
-    <p>
-    Clicking on links to PDF documents should no longer open the
-    embedded viewer but pop up a dialog box. Select "Always perform this
-    action..." checkbox if you want Sumatra to automatically open those PDF files.</p>
--->
-<!-- link no longer seems to work
-    <p>If those instructions don't work, you can always try <a href="http://howto.helpero.com/howto/Disable-PDF-Browser-Plugin-For-Firefox_29.html">this method.</a></p>
--->
+    <p>You can find more documentation on <a href="https://www.notion.so/SumatraPDF-documentation-fed36a5624d443fe9f7be0e410ecd715">this page</a>.</p>
   </div>
 </div>
 </div>

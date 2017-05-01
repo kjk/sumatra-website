@@ -11,9 +11,12 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"os/signal"
 	"path/filepath"
 	"strconv"
 	"strings"
+	"sync"
+	"syscall"
 	"time"
 
 	"golang.org/x/crypto/acme/autocert"
@@ -141,20 +144,53 @@ func logIfErr(err error) {
 	}
 }
 
-// https://blog.gopheracademy.com/advent-2016/exposing-go-on-the-internet/
+func fmtArgs(args ...interface{}) string {
+	if len(args) == 0 {
+		return ""
+	}
+	format := args[0].(string)
+	if len(args) == 1 {
+		return format
+	}
+	return fmt.Sprintf(format, args[1:]...)
+}
+
+func panicWithMsg(defaultMsg string, args ...interface{}) {
+	s := fmtArgs(args...)
+	if s == "" {
+		s = defaultMsg
+	}
+	fmt.Printf("%s\n", s)
+	panic(s)
+}
+
+func fatalIfErr(err error, args ...interface{}) {
+	if err == nil {
+		return
+	}
+	panicWithMsg(err.Error(), args...)
+}
+
+func fatalIf(cond bool, args ...interface{}) {
+	if !cond {
+		return
+	}
+	panicWithMsg("fatalIf: condition failed", args...)
+}
+
 func makeHTTPServer() *http.Server {
 	mux := &http.ServeMux{}
 
 	mux.HandleFunc("/", handleMainPage)
 	mux.HandleFunc("/dl/", handleDl)
 
+	// https://blog.gopheracademy.com/advent-2016/exposing-go-on-the-internet/
 	srv := &http.Server{
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 5 * time.Second,
 		IdleTimeout:  120 * time.Second,
 		Handler:      mux,
 	}
-	// TODO: track connections and their state
 	return srv
 }
 
@@ -169,24 +205,56 @@ func main() {
 	parseCmdLineFlags()
 	rand.Seed(time.Now().UnixNano())
 
+	var wg sync.WaitGroup
+	var httpsSrv, httpSrv *http.Server
+
 	if inProduction {
-		srv := makeHTTPServer()
+		httpsSrv = makeHTTPServer()
 		m := autocert.Manager{
 			Prompt:     autocert.AcceptTOS,
 			HostPolicy: hostPolicy,
 		}
-		srv.Addr = ":443"
-		srv.TLSConfig = &tls.Config{GetCertificate: m.GetCertificate}
-		fmt.Printf("Started runing HTTPS on %s\n", srv.Addr)
-		go srv.ListenAndServeTLS("", "")
+		httpsSrv.Addr = ":443"
+		httpsSrv.TLSConfig = &tls.Config{GetCertificate: m.GetCertificate}
+		fmt.Printf("Started runing HTTPS on %s\n", httpsSrv.Addr)
+		go func() {
+			wg.Add(1)
+			err := httpsSrv.ListenAndServeTLS("", "")
+			// mute error caused by Shutdown()
+			if err == http.ErrServerClosed {
+				err = nil
+			}
+			fatalIfErr(err)
+			fmt.Printf("HTTPS server gracefully stopped\n")
+			wg.Done()
+		}()
 	}
 
-	srv := makeHTTPServer()
-	srv.Addr = httpAddr
-	msg := fmt.Sprintf("Started running on %s, inProduction: %v", httpAddr, inProduction)
-	fmt.Printf("%s\n", msg)
-	if err := srv.ListenAndServe(); err != nil {
-		fmt.Printf("http.ListendAndServer() failed with %s\n", err)
+	httpSrv = makeHTTPServer()
+	httpSrv.Addr = httpAddr
+	fmt.Printf("Started running on %s, inProduction: %v\n", httpAddr, inProduction)
+	go func() {
+		wg.Add(1)
+		err := httpSrv.ListenAndServe()
+		// mute error caused by Shutdown()
+		if err == http.ErrServerClosed {
+			err = nil
+		}
+		fatalIfErr(err)
+		fmt.Printf("HTTP server gracefully stopped\n")
+		wg.Done()
+	}()
+
+	c := make(chan os.Signal, 2)
+	signal.Notify(c, os.Interrupt /* SIGINT */, syscall.SIGTERM)
+	sig := <-c
+	fmt.Printf("Got signal %s\n", sig)
+	if httpsSrv != nil {
+		httpsSrv.Shutdown(nil)
 	}
-	fmt.Printf("Exited\n")
+	if httpSrv != nil {
+		httpSrv.Shutdown(nil)
+	}
+	wg.Wait()
+	fmt.Printf("Did shutdown http and https servers\n")
 }

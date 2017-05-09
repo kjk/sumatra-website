@@ -48,6 +48,7 @@ func parseCmdLineFlags() {
 	flag.Parse()
 }
 
+// return true if redirected
 func redirectIfNeeded(w http.ResponseWriter, r *http.Request) bool {
 	parsed, err := url.Parse(r.URL.Path)
 	if err != nil {
@@ -60,6 +61,8 @@ func redirectIfNeeded(w http.ResponseWriter, r *http.Request) bool {
 		redirect = "free-pdf-reader.html"
 	case "/download.html":
 		redirect = "download-free-pdf-viewer.html"
+	case "/forum.html":
+		redirect = "https://forum.sumatrapdfreader.org/"
 	}
 
 	if redirect == "" {

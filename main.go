@@ -57,6 +57,8 @@ func redirectIfNeeded(w http.ResponseWriter, r *http.Request) bool {
 
 	redirect := ""
 	switch parsed.Path {
+	case "/docs/":
+		redirect = "/docs/SumatraPDF-documentation-fed36a5624d443fe9f7be0e410ecd715.html"
 	case "/":
 		redirect = "free-pdf-reader.html"
 	case "/download.html":

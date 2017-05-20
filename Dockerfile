@@ -4,9 +4,9 @@ RUN apk add --no-cache ca-certificates
 
 WORKDIR /app
 
-COPY sumatra_website_linux /app/
+COPY sumatra_website_linux /app/sumatra_website
 COPY www /app/www/
 
 EXPOSE 80 443
 
-CMD ["/app/sumatra_website_linux", "-production"]
+CMD ["/app/sumatra_website", "-production"]

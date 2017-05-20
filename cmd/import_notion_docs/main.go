@@ -42,7 +42,7 @@ func main() {
 		// # [Docs](/docs/) : ommand-line arguments
 		// except for the index page
 		if f.Name != "SumatraPDF-documentation-fed36a5624d443fe9f7be0e410ecd715.md" {
-			d = bytes.Replace(d, []byte("# "), []byte("# [Docs](/docs/) : "), 1)
+			d = bytes.Replace(d, []byte("# "), []byte("# [Documentation](/docs/) : "), 1)
 		}
 		// some links in exported .md files are absolute to www.notion.so.
 		// change them to be relative to docs folder

@@ -46,6 +46,9 @@ func parseCmdLineFlags() {
 	flag.StringVar(&httpAddr, "addr", "127.0.0.1:5030", "HTTP server address")
 	flag.BoolVar(&inProduction, "production", false, "are we running in production")
 	flag.Parse()
+	if inProduction {
+		httpAddr = ":80"
+	}
 }
 
 // return true if redirected

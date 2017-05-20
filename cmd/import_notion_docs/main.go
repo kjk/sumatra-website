@@ -33,8 +33,6 @@ func main() {
 		d := readZipFileMust(f)
 		fmt.Printf("Read %s of size %d\n", f.Name, len(d))
 		mdPath := filepath.Join(mdDir, f.Name)
-		err = ioutil.WriteFile(mdPath, d, 0644)
-		fatalIfErr(err)
 
 		// replace .md links with .html links. Should be more sophisticated than this
 		d = bytes.Replace(d, []byte(".md"), []byte(".html"), -1)
@@ -46,6 +44,15 @@ func main() {
 		if f.Name != "SumatraPDF-documentation-fed36a5624d443fe9f7be0e410ecd715.md" {
 			d = bytes.Replace(d, []byte("# "), []byte("# [Docs](/docs/) : "), 1)
 		}
+		// some links in exported .md files are absolute to www.notion.so.
+		// change them to be relative to docs folder
+		// TODO: they don't have .md suffix, so we should add it here
+		// for now we fix it up in serving code
+		d = bytes.Replace(d, []byte("https://www.notion.so"), []byte("/docs"), -1)
+
+		err = ioutil.WriteFile(mdPath, d, 0644)
+		fatalIfErr(err)
+
 		htmlInner := blackfriday.MarkdownCommon(d)
 		html := strings.Replace(string(htmlTmpl), "{{ body }}", string(htmlInner), -1)
 		htmlPath := filepath.Join(htmlDir, strings.Replace(f.Name, ".md", ".html", -1))

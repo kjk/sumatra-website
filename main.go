@@ -118,6 +118,14 @@ func handleDl(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, redirectURI, http.StatusFound)
 }
 
+func serveIfFileExists(w http.ResponseWriter, r *http.Request, path string) bool {
+	if !fileExists(path) {
+		return false
+	}
+	http.ServeFile(w, r, path)
+	return true
+}
+
 func handleMainPage(w http.ResponseWriter, r *http.Request) {
 	if redirectIfNeeded(w, r) {
 		return
@@ -132,15 +140,23 @@ func handleMainPage(w http.ResponseWriter, r *http.Request) {
 	uri := parsed.Path
 	path := filepath.Join("www", uri)
 
-	if !fileExists(path) {
-		newURI := untranslatedURLRedirect(uri)
-		if newURI != "" {
-			http.Redirect(w, r, newURI, http.StatusFound)
-			return
-		}
+	if serveIfFileExists(w, r, path) {
+		return
 	}
 
-	http.ServeFile(w, r, path)
+	// some links in /docs/ don't have .html suffix, so re-try by adding it
+	if serveIfFileExists(w, r, path+".html") {
+		return
+	}
+
+	newURI := untranslatedURLRedirect(uri)
+	if newURI != "" {
+		http.Redirect(w, r, newURI, http.StatusFound)
+		return
+	}
+
+	// TODO: custom 404 page
+	http.NotFound(w, r)
 }
 
 func logIfErr(err error) {

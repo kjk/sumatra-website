@@ -6,7 +6,6 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"io"
 	"math/rand"
 	"net/http"
 	"net/url"
@@ -32,16 +31,6 @@ var (
 	disableLocalDownloads = false
 )
 
-func writeResponse(w http.ResponseWriter, responseBody string) {
-	w.Header().Set("Content-Length", strconv.FormatInt(int64(len(responseBody)), 10))
-	io.WriteString(w, responseBody)
-}
-
-func textResponse(w http.ResponseWriter, text string) {
-	w.Header().Set("Content-Type", "text/plain")
-	writeResponse(w, text)
-}
-
 func parseCmdLineFlags() {
 	flag.StringVar(&httpAddr, "addr", "127.0.0.1:5030", "HTTP server address")
 	flag.BoolVar(&inProduction, "production", false, "are we running in production")
@@ -49,6 +38,12 @@ func parseCmdLineFlags() {
 	if inProduction {
 		httpAddr = ":80"
 	}
+}
+func servePlainText(w http.ResponseWriter, s string) {
+	w.Header().Set("Content-Type", "text/plain")
+	w.Header().Set("Content-Length", strconv.Itoa(len(s)))
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(s))
 }
 
 // return true if redirected
@@ -129,6 +124,13 @@ func serveIfFileExists(w http.ResponseWriter, r *http.Request, path string) bool
 	return true
 }
 
+// /ping
+
+func handlePing(w http.ResponseWriter, r *http.Request) {
+	servePlainText(w, "pong")
+}
+
+// /
 func handleMainPage(w http.ResponseWriter, r *http.Request) {
 	if redirectIfNeeded(w, r) {
 		return
@@ -206,6 +208,7 @@ func makeHTTPServer() *http.Server {
 	mux := &http.ServeMux{}
 
 	mux.HandleFunc("/", handleMainPage)
+	mux.HandleFunc("/ping", handlePing)
 	mux.HandleFunc("/dl/", handleDl)
 
 	// https://blog.gopheracademy.com/advent-2016/exposing-go-on-the-internet/

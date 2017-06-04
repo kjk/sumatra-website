@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"strings"
 	"sync"
 	"syscall"
@@ -73,6 +74,9 @@ func main() {
 
 	parseCmdLineFlags()
 	rand.Seed(time.Now().UnixNano())
+
+	analyticsPath := filepath.Join(getDataDir(), "analytics", "2006-01-02.txt")
+	initAnalyticsMust(analyticsPath)
 
 	var wg sync.WaitGroup
 	var httpsSrv, httpSrv *http.Server

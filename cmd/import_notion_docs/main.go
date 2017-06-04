@@ -96,7 +96,7 @@ const (
     </div>
 
     <hr>
-    <center><a href="http://blog.kowalczyk.info">Krzysztof Kowalczyk</a></center>
+    <center><a href="https://blog.kowalczyk.info">Krzysztof Kowalczyk</a></center>
     <script>
         window.ga = window.ga || function() {
             (ga.q = ga.q || []).push(arguments)

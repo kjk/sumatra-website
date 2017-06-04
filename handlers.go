@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"net/url"
 	"path/filepath"
@@ -97,7 +96,7 @@ func untranslatedURLRedirect(uri string) string {
 	newURI = newURI[:n-3] + ".html"
 	path := filepath.Join("www", newURI)
 	if u.FileExists(path) {
-		fmt.Printf("%s => %s\n", uri, newURI)
+		// fmt.Printf("%s => %s\n", uri, newURI)
 		return newURI
 	}
 	return ""

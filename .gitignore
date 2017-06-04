@@ -3,3 +3,4 @@ sumatra_website_linux
 *.zip
 *.exe
 www/docs/md/
+vendor/

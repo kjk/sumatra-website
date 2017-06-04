@@ -6,6 +6,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"log"
 	"math/rand"
 	"net/http"
 	"os"
@@ -25,19 +26,22 @@ const (
 )
 
 var (
-	httpAddr     string
-	inProduction bool
+	flgHTTPAddr   string
+	flgProduction bool
 	// if true, we redirect all downloads to s3. If false, some of them
 	// will be served by us (and cached by cloudflare)
 	disableLocalDownloads = false
+
+	dataDir string
+	sha1ver string
 )
 
 func parseCmdLineFlags() {
-	flag.StringVar(&httpAddr, "addr", "127.0.0.1:5030", "HTTP server address")
-	flag.BoolVar(&inProduction, "production", false, "are we running in production")
+	flag.StringVar(&flgHTTPAddr, "addr", "127.0.0.1:5030", "HTTP server address")
+	flag.BoolVar(&flgProduction, "production", false, "are we running in production")
 	flag.Parse()
-	if inProduction {
-		httpAddr = ":80"
+	if flgProduction {
+		flgHTTPAddr = ":80"
 	}
 }
 
@@ -47,21 +51,39 @@ func logIfErr(err error) {
 	}
 }
 
-func hostPolicy(ctx context.Context, host string) error {
-	if strings.HasSuffix(host, "sumatrapdfreader.org") {
-		return nil
+func getDataDir() string {
+	if dataDir != "" {
+		return dataDir
 	}
-	return errors.New("acme/autocert: only *.sumatrapdfreader.org hosts are allowed")
+
+	dirsToCheck := []string{"/data", u.ExpandTildeInPath("~/data/sumatra-website")}
+	for _, dir := range dirsToCheck {
+		if u.PathExists(dir) {
+			dataDir = dir
+			return dataDir
+		}
+	}
+
+	log.Fatalf("data directory (%v) doesn't exist", dirsToCheck)
+	return ""
 }
 
 func main() {
+	getDataDir() // force early error if data dir doesn't exist
+
 	parseCmdLineFlags()
 	rand.Seed(time.Now().UnixNano())
 
 	var wg sync.WaitGroup
 	var httpsSrv, httpSrv *http.Server
 
-	if inProduction {
+	if flgProduction {
+		hostPolicy := func(ctx context.Context, host string) error {
+			if strings.HasSuffix(host, "sumatrapdfreader.org") {
+				return nil
+			}
+			return errors.New("acme/autocert: only *.sumatrapdfreader.org hosts are allowed")
+		}
 		httpsSrv = makeHTTPServer()
 		m := autocert.Manager{
 			Prompt:     autocert.AcceptTOS,
@@ -84,8 +106,8 @@ func main() {
 	}
 
 	httpSrv = makeHTTPServer()
-	httpSrv.Addr = httpAddr
-	fmt.Printf("Started running on %s, inProduction: %v\n", httpAddr, inProduction)
+	httpSrv.Addr = flgHTTPAddr
+	fmt.Printf("Started running on %s, flgProduction: %v, dataDir: %s\n", flgHTTPAddr, flgProduction, getDataDir())
 	go func() {
 		wg.Add(1)
 		err := httpSrv.ListenAndServe()
@@ -97,6 +119,10 @@ func main() {
 		fmt.Printf("HTTP server gracefully stopped\n")
 		wg.Done()
 	}()
+
+	if flgProduction {
+		sendBootMail()
+	}
 
 	c := make(chan os.Signal, 2)
 	signal.Notify(c, os.Interrupt /* SIGINT */, syscall.SIGTERM)

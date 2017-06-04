@@ -1,9 +1,8 @@
 #!/bin/bash
 set -u -e -o pipefail
 
-go tool vet *.go
-GOOS=linux GOARCH=amd64 go build -o sumatra_website_linux
+GOOS=linux GOARCH=amd64 go build -o sumatra_website_linux -ldflags "-X main.sha1ver=`git rev-parse HEAD`"
 
-docker build --tag sumatra-website:latest .
+docker build --no-cache --tag sumatra-website:latest .
 
 rm sumatra_website_linux

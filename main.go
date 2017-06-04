@@ -111,7 +111,7 @@ func main() {
 
 	httpSrv = makeHTTPServer()
 	httpSrv.Addr = flgHTTPAddr
-	fmt.Printf("Started running on %s, flgProduction: %v, dataDir: %s\n", flgHTTPAddr, flgProduction, getDataDir())
+	fmt.Printf("Started running on %s, flgProduction: %v, dataDir: %s, version: github.com/sumatrapdfreader/sumatra-website/commit/%s\n", flgHTTPAddr, flgProduction, getDataDir(), sha1ver)
 	go func() {
 		wg.Add(1)
 		err := httpSrv.ListenAndServe()

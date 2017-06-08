@@ -29,13 +29,13 @@
   branch = "master"
   name = "github.com/kjk/u"
   packages = ["."]
-  revision = "f4485540eb9a4b68a40252b20194a8fa580776c9"
+  revision = "a8dc8a93557893f99b679cf644fc795d8e676750"
 
 [[projects]]
   branch = "master"
   name = "github.com/kurin/blazer"
   packages = ["b2","base","internal/b2types","internal/blog"]
-  revision = "48de0a1e4d21fba201aff7fefdf3e5e7735b1439"
+  revision = "37589164c2e262ddf5b9bc82e3f8da4a6207c0e4"
 
 [[projects]]
   name = "github.com/pkg/errors"
@@ -53,13 +53,13 @@
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["acme","acme/autocert"]
-  revision = "e1a4589e7d3ea14a3352255d04b6f1a418845e5e"
+  revision = "e7ba82683099cae71475961448ab8f903ea77c26"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/net"
   packages = ["context"]
-  revision = "e4fa1c5465ad6111f206fc92186b8c83d64adbe1"
+  revision = "59a0b19b5533c7977ddeb86b017bf507ed407b12"
 
 [solve-meta]
   analyzer-name = "dep"

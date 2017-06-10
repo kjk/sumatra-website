@@ -236,10 +236,30 @@ func onAnalyticsFileClosed(path string, didRotate bool) {
 	}
 }
 
+var (
+	// based on 404 logs
+	dontLog404 = map[string]bool{
+		"/robots.txt":                                    true,
+		"/wp-login.php":                                  true,
+		"/components/com_mailto/views/sent/metadata.xml": true,
+		"/phpMyAdmin":                                    true,
+		"/wp-content/themes/twentyeleven/readme.txt":     true,
+		"/adform/IFrameManager.html":                     true,
+		"/rules.abe":                                     true,
+		"/joomla.xml":                                    true,
+		"/administrator/":                                true,
+		"/configuration.php~":                            true,
+		"/jax_guestbook.php":                             true,
+		"/guestbook.php":                                 true,
+		"/wp-config.php~":                                true,
+		"/.git/HEAD":                                     true,
+	}
+)
+
 // for visitor analytics, not all hits are important
 func shouldLog(r *http.Request) bool {
 	uri := r.RequestURI
-	if uri == "/robots.txt" {
+	if dontLog404[uri] {
 		return false
 	}
 	ext := strings.ToLower(filepath.Ext(uri))

@@ -17,6 +17,23 @@ import (
 	"github.com/kjk/u"
 )
 
+var (
+	// based on 404 logs
+	dontLog404 = map[string]bool{
+		"/robots.txt":                                    true,
+		"/components/com_mailto/views/sent/metadata.xml": true,
+		"/phpMyAdmin":                                    true,
+		"/wp-content/themes/twentyeleven/readme.txt":     true,
+		"/adform/IFrameManager.html":                     true,
+		"/rules.abe":                                     true,
+		"/joomla.xml":                                    true,
+		"/administrator/":                                true,
+		"/configuration.php~":                            true,
+		"/wp-config.php~":                                true,
+		"/.git/HEAD":                                     true,
+	}
+)
+
 const (
 	keyURI       = "uri"
 	keyCode      = "code"
@@ -236,26 +253,6 @@ func onAnalyticsFileClosed(path string, didRotate bool) {
 	}
 }
 
-var (
-	// based on 404 logs
-	dontLog404 = map[string]bool{
-		"/robots.txt":                                    true,
-		"/wp-login.php":                                  true,
-		"/components/com_mailto/views/sent/metadata.xml": true,
-		"/phpMyAdmin":                                    true,
-		"/wp-content/themes/twentyeleven/readme.txt":     true,
-		"/adform/IFrameManager.html":                     true,
-		"/rules.abe":                                     true,
-		"/joomla.xml":                                    true,
-		"/administrator/":                                true,
-		"/configuration.php~":                            true,
-		"/jax_guestbook.php":                             true,
-		"/guestbook.php":                                 true,
-		"/wp-config.php~":                                true,
-		"/.git/HEAD":                                     true,
-	}
-)
-
 // for visitor analytics, not all hits are important
 func shouldLog(r *http.Request) bool {
 	uri := r.RequestURI
@@ -264,7 +261,12 @@ func shouldLog(r *http.Request) bool {
 	}
 	ext := strings.ToLower(filepath.Ext(uri))
 	switch ext {
+	// we don't care about stats for image/javascript/css files
 	case ".png", ".jpg", ".jpeg", ".ico", ".gif", ".css", ".js":
+		return false
+	// we skip .php and .asp, aspx because those are used to probe
+	// for vulnerabilities and we don't have any pages
+	case ".php", ".asp", ".aspx":
 		return false
 	}
 	return true

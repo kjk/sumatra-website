@@ -23,6 +23,7 @@ var (
 		"/robots.txt":                                    true,
 		"/components/com_mailto/views/sent/metadata.xml": true,
 		"/phpMyAdmin":                                    true,
+		"/phpmyadmin":                                    true,
 		"/wp-content/themes/twentyeleven/readme.txt":     true,
 		"/adform/IFrameManager.html":                     true,
 		"/rules.abe":                                     true,
@@ -31,6 +32,7 @@ var (
 		"/configuration.php~":                            true,
 		"/wp-config.php~":                                true,
 		"/.git/HEAD":                                     true,
+		"/.well-known/dnt-policy.txt":                    true,
 	}
 )
 

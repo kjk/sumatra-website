@@ -136,6 +136,9 @@ func calcAnalyticsStats(path string) (*analyticsStats, error) {
 
 		// we don't care about internal referers
 		if referer != "" && !strings.Contains(referer, "www.sumatrapdfreader.org") {
+			if strings.Contains(referer, ".google.") {
+				referer = "Google"
+			}
 			refererCount[referer]++
 		}
 

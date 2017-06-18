@@ -51,6 +51,17 @@ func serve404(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(s))
 }
 
+func shouldLog404(uri string) bool {
+	ext := strings.ToLower(filepath.Ext(uri))
+	switch ext {
+	case ".php", ".gz", ".bak", ".gz", ".ssi", ".tar", ".rar", ".sql":
+		return false
+	case ".zip":
+		return strings.HasPrefix("/dl/", uri)
+	}
+	return true
+}
+
 var (
 	redirects = map[string]string{
 		"/docs/":                             "/docs/SumatraPDF-documentation-fed36a5624d443fe9f7be0e410ecd715.html",
@@ -60,9 +71,13 @@ var (
 		"/index.htm":                         "free-pdf-reader.html",
 		"/home.php":                          "free-pdf-reader.html",
 		"/free-pdf-reader.html:":             "free-pdf-reader.html",
+		"/free-pdf-reader-ja.htmlPDF":        "free-pdf-reader.html",
+		"/free-pdf-reader-ru.html/":          "free-pdf-reader.html",
+		"/sumatrapdf":                        "free-pdf-reader.html",
 		"/download.html":                     "download-free-pdf-viewer.html",
 		"/download-free-pdf-viewer-es.html,": "download-free-pdf-viewer.html",
 		"/translators.html":                  "https://github.com/sumatrapdfreader/sumatrapdf/blob/master/TRANSLATORS",
+		"/develop.html/":                     "/docs/Join-the-project-as-a-developer-be6ef085e89f49038c2b671c0743b690.html",
 		"/develop.html":                      "/docs/Join-the-project-as-a-developer-be6ef085e89f49038c2b671c0743b690.html",
 		"/forum.html":                        "https://forum.sumatrapdfreader.org/",
 	}
@@ -165,7 +180,9 @@ func handleMainPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	serve404(w, r)
+	if shouldLog404(uri) {
+		serve404(w, r)
+	}
 }
 
 func makeHTTPServer() *http.Server {

@@ -78,7 +78,7 @@ func main() {
 	initAnalyticsMust(analyticsPath)
 
 	var wg sync.WaitGroup
-	var httpsSrv, httpSrv *http.Server
+	var httpsSrv *http.Server
 
 	if flgProduction {
 		hostPolicy := func(ctx context.Context, host string) error {
@@ -112,7 +112,7 @@ func main() {
 		}()
 	}
 
-	httpSrv = makeHTTPServer()
+	httpSrv := makeHTTPServer()
 	httpSrv.Addr = flgHTTPAddr
 	fmt.Printf("Starting HTTP on %s, flgProduction: %v, dataDir: %s, version: github.com/sumatrapdfreader/sumatra-website/commit/%s\n", flgHTTPAddr, flgProduction, getDataDir(), sha1ver)
 	go func() {

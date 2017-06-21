@@ -82,22 +82,23 @@ func main() {
 
 	if flgProduction {
 		hostPolicy := func(ctx context.Context, host string) error {
-			// Note: change to your real domain
-			myDomain := "sumatrapdfreader.org"
-			if strings.HasSuffix(host, myDomain) {
+			allowedDomain := "sumatrapdfreader.org"
+			if strings.HasSuffix(host, allowedDomain) {
 				return nil
 			}
-			return fmt.Errorf("acme/autocert: only *.%s hosts are allowed", myDomain)
+			return fmt.Errorf("acme/autocert: only *.%s hosts are allowed", allowedDomain)
 		}
-		httpsSrv = makeHTTPServer()
+
 		m := autocert.Manager{
 			Prompt:     autocert.AcceptTOS,
 			HostPolicy: hostPolicy,
 			Cache:      autocert.DirCache(getDataDir()),
 		}
+
+		httpsSrv = makeHTTPServer()
 		httpsSrv.Addr = ":443"
 		httpsSrv.TLSConfig = &tls.Config{GetCertificate: m.GetCertificate}
-		fmt.Printf("Started runing HTTPS on %s\n", httpsSrv.Addr)
+		fmt.Printf("Starting HTTPS on %s\n", httpsSrv.Addr)
 		go func() {
 			wg.Add(1)
 			err := httpsSrv.ListenAndServeTLS("", "")
@@ -113,7 +114,7 @@ func main() {
 
 	httpSrv = makeHTTPServer()
 	httpSrv.Addr = flgHTTPAddr
-	fmt.Printf("Started running on %s, flgProduction: %v, dataDir: %s, version: github.com/sumatrapdfreader/sumatra-website/commit/%s\n", flgHTTPAddr, flgProduction, getDataDir(), sha1ver)
+	fmt.Printf("Starting HTTP on %s, flgProduction: %v, dataDir: %s, version: github.com/sumatrapdfreader/sumatra-website/commit/%s\n", flgHTTPAddr, flgProduction, getDataDir(), sha1ver)
 	go func() {
 		wg.Add(1)
 		err := httpSrv.ListenAndServe()

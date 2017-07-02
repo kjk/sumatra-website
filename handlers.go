@@ -54,7 +54,7 @@ func serve404(w http.ResponseWriter, r *http.Request) {
 func shouldLog404(uri string) bool {
 	ext := strings.ToLower(filepath.Ext(uri))
 	switch ext {
-	case ".php", ".gz", ".bak", ".gz", ".ssi", ".tar", ".rar", ".sql":
+	case ".php", ".bak", ".gz", ".ssi", ".tar", ".rar", ".sql":
 		return false
 	case ".zip":
 		return strings.HasPrefix("/dl/", uri)

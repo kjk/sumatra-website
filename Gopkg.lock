@@ -5,7 +5,7 @@
   branch = "master"
   name = "github.com/SparkPost/gosparkpost"
   packages = [".","events"]
-  revision = "c041325a607bb2faf3a138e48a17074172ac4da7"
+  revision = "7e8565c83ee09336624604fba3cf6e9853926c2c"
 
 [[projects]]
   branch = "master"
@@ -29,7 +29,7 @@
   branch = "master"
   name = "github.com/kjk/u"
   packages = ["."]
-  revision = "a8dc8a93557893f99b679cf644fc795d8e676750"
+  revision = "40cfe878942451cfeb470309642d1f6b82896eb8"
 
 [[projects]]
   branch = "master"
@@ -47,19 +47,19 @@
   branch = "master"
   name = "github.com/russross/blackfriday"
   packages = ["."]
-  revision = "0ba0f2b6ed7c475a92e4df8641825cb7a11d1fa3"
+  revision = "067529f716f4c3f5e37c8c95ddd59df1007290ae"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["acme","acme/autocert"]
-  revision = "e7ba82683099cae71475961448ab8f903ea77c26"
+  revision = "a48ac81e47fd6f9ed1258f3b60ae9e75f93cb7ed"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/net"
   packages = ["context"]
-  revision = "59a0b19b5533c7977ddeb86b017bf507ed407b12"
+  revision = "054b33e6527139ad5b1ec2f6232c3b175bd9a30c"
 
 [solve-meta]
   analyzer-name = "dep"

@@ -90,23 +90,6 @@ function dlAfterHtml64(s1, s2, s3, s4) {
         '<a href="' + gSumZipUrl64 + '">' + s3 + '</a>' + s4;
 }
 
-// A heuristic used to detect preferred language of the user
-// based on settings in navigator object.
-// TODO: we should also look at Accept-Language header, which might look like:
-// Accept-Language:ru,en-US;q=0.8,en;q=0.6
-// but headers are not available from JavaScript so I would have to
-// pass this data somehow from the server to html or use additional
-// request from javascript as described at http://stackoverflow.com/questions/1043339/javascript-for-detecting-browser-language-preference
-function detectUserLang() {
-    var n = window.navigator;
-    // a heuristic: userLanguage and browserLanguage are for ie
-    // language is for FireFox and Chrome
-    var lang1 = n.userLanguage || n.browserLanguage || n.language || "en";
-    // we only care about "en" part of languages like "en-US"
-    return lang1.substring(0, 2);
-}
-
-
 // given /free-pdf-reader.html returns free-pdf-reader
 // special case for /docs/*.html => docs
 function getBaseUrl() {

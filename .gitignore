@@ -4,3 +4,5 @@ sumatra_website_linux
 *.exe
 www/docs/md/
 vendor/
+blog_app
+netlifyctl-debug.log

@@ -62,27 +62,6 @@ func shouldLog404(uri string) bool {
 	return true
 }
 
-var (
-	redirects = map[string]string{
-		"/docs/":                             "/docs/SumatraPDF-documentation-fed36a5624d443fe9f7be0e410ecd715.html",
-		"/":                                  "free-pdf-reader.html",
-		"/index.html":                        "free-pdf-reader.html",
-		"/index.php":                         "free-pdf-reader.html",
-		"/index.htm":                         "free-pdf-reader.html",
-		"/home.php":                          "free-pdf-reader.html",
-		"/free-pdf-reader.html:":             "free-pdf-reader.html",
-		"/free-pdf-reader-ja.htmlPDF":        "free-pdf-reader.html",
-		"/free-pdf-reader-ru.html/":          "free-pdf-reader.html",
-		"/sumatrapdf":                        "free-pdf-reader.html",
-		"/download.html":                     "download-free-pdf-viewer.html",
-		"/download-free-pdf-viewer-es.html,": "download-free-pdf-viewer.html",
-		"/translators.html":                  "https://github.com/sumatrapdfreader/sumatrapdf/blob/master/TRANSLATORS",
-		"/develop.html/":                     "/docs/Join-the-project-as-a-developer-be6ef085e89f49038c2b671c0743b690.html",
-		"/develop.html":                      "/docs/Join-the-project-as-a-developer-be6ef085e89f49038c2b671c0743b690.html",
-		"/forum.html":                        "https://forum.sumatrapdfreader.org/",
-	}
-)
-
 // returns true if did redirect url
 func redirectIfNeeded(w http.ResponseWriter, r *http.Request) bool {
 	parsed, err := url.Parse(r.URL.Path)

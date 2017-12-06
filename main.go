@@ -26,8 +26,9 @@ const (
 )
 
 var (
-	flgHTTPAddr   string
-	flgProduction bool
+	flgHTTPAddr     string
+	flgProduction   bool
+	flgNetlifyBuild bool
 	// if true, we redirect all downloads to s3. If false, some of them
 	// will be served by us (and cached by cloudflare)
 	disableLocalDownloads = false
@@ -39,6 +40,8 @@ var (
 func parseCmdLineFlags() {
 	flag.StringVar(&flgHTTPAddr, "addr", "127.0.0.1:5030", "HTTP server address")
 	flag.BoolVar(&flgProduction, "production", false, "are we running in production")
+	flag.BoolVar(&flgNetlifyBuild, "netlify-build", false, "if true, builds and deploys to netlify")
+
 	flag.Parse()
 	if flgProduction {
 		flgHTTPAddr = ":80"
@@ -76,6 +79,11 @@ func main() {
 
 	analyticsPath := filepath.Join(getDataDir(), "analytics", "2006-01-02.txt")
 	initAnalyticsMust(analyticsPath)
+
+	if flgNetlifyBuild {
+		netlifyBuild()
+		return
+	}
 
 	var wg sync.WaitGroup
 	var httpsSrv *http.Server

@@ -10,3 +10,4 @@ exitIfFailed
 exitIfFailed
 
 netlifyctl deploy -b www
+# get-childitem . -include blog_app* | ForEach-Object ($_) {remove-item $_.fullname}

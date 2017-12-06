@@ -77,7 +77,7 @@ func mkdirForFile(filePath string) error {
 
 func netlifyPath(fileName string) string {
 	fileName = strings.TrimLeft(fileName, "/")
-	path := filepath.Join("netlify_static", "www", fileName)
+	path := filepath.Join("www", fileName)
 	err := mkdirForFile(path)
 	u.PanicIfErr(err)
 	return path
@@ -90,6 +90,12 @@ func netlifyWriteFile(fileName string, d []byte) {
 }
 
 func netlifyWriteRedirects() {
+	netlifyAddStaticRedirects()
+
+	from := "/dl/*"
+	to := "https://kjkpub.s3.amazonaws.com/sumatrapdf/rel/:splat"
+	netflifyAddTempRedirect(from, to)
+
 	var buf bytes.Buffer
 	for _, r := range netlifyRedirects {
 		s := fmt.Sprintf("%s\t%s\t%d\n", r.from, r.to, r.code)
@@ -100,5 +106,5 @@ func netlifyWriteRedirects() {
 
 func netlifyBuild() {
 	// TODO: implement me
-	netlifyAddStaticRedirects()
+	netlifyWriteRedirects()
 }

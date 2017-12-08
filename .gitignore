@@ -6,3 +6,4 @@ www/docs/md/
 vendor/
 blog_app
 netlifyctl-debug.log
+Caddyfile

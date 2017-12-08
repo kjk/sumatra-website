@@ -13,5 +13,4 @@ exitIfFailed
 Start-Process -Wait -FilePath $exe
 Remove-Item -Path $exe
 
-netlifyctl deploy -b www
-# get-childitem . -include blog_app* | ForEach-Object ($_) {remove-item $_.fullname}
+caddy -log stdout

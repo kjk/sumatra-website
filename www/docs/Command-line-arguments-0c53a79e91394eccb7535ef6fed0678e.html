@@ -2,31 +2,32 @@
 <html>
 
 <head>
-    <meta http-equiv="Content-Language" content="en-us">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="keywords" content="pdf, epub, mobi, chm, cbr, cbz, xps, djvu, reader, viewer" />
-    <meta name="description" content="Sumatra PDF reader and viewer for Windows" />
-    <title>Sumatra PDF Documentation</title>
-    <link rel="stylesheet" href="/sumatra.css" type="text/css" />
+	<meta http-equiv="Content-Language" content="en-us">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="keywords" content="pdf, epub, mobi, chm, cbr, cbz, xps, djvu, reader, viewer" />
+	<meta name="description" content="Sumatra PDF reader and viewer for Windows" />
+	<title>Sumatra PDF Documentation</title>
+	<link rel="stylesheet" href="/sumatra.css" type="text/css" />
 </head>
 
 <body>
-    <script type="text/javascript" src="/sumatra.js"></script>
+	<script type="text/javascript" src="/sumatra.js"></script>
 
-    <div id="container">
-        <div id="banner">
-            <h1 style="display:inline;">Sumatra PDF
-                <font size="-1">is a PDF, ePub, MOBI, CHM, XPS, DjVu, CBZ, CBR reader for Windows</font>
-            </h1>
-            <script type="text/javascript">
-                document.write(navHtml());
-            </script>
-        </div>
+	<div id="container">
+		<div id="banner">
+			<h1 style="display:inline;">Sumatra PDF
+				<font size="-1">is a PDF, ePub, MOBI, CHM, XPS, DjVu, CBZ, CBR reader for Windows</font>
+			</h1>
+			<script type="text/javascript">
+				document.write(navHtml());
+			</script>
+		</div>
 
-        <br/>
-				<div id="center">
-					<div class="content">
-<h1><a href="/docs/">Documentation</a> : Command-line arguments</h1>
+		<br/>
+
+		<div id="center">
+			<div class="content">
+				<h1><a href="/docs/">Documentation</a> : Command-line arguments</h1>
 
 <p>You can launch Sumatra with additional command-line options: <code>SumatraPDF.exe [argument ...] [filepath ...]</code> .</p>
 
@@ -132,7 +133,7 @@
 
 <ul>
 <li><code>-bg-color &lt;hexcolor&gt;</code> : Changes the yellow background color to a different color. See e.g. <a href="http://html-color-codes.info/">html-color-codes.info</a> for a way to generate the hexcode for a color. E.g. <code>-bg-color #999999</code> changes the color to gray.
-[Deprecated]: Use <a href="https://blog.kowalczyk.info/software/sumatrapdf/settings.html#MainWindowBackground">MainWindowBackground</a> setting instead.</li>
+[Deprecated]: Use <a href="https://www.sumatrapdfreader.org/settings.html#MainWindowBackground">MainWindowBackground</a> setting instead.</li>
 <li><code>-esc-to-exit</code> : Enables the Escape key to quit SumatraPDF. Deprecated: Use the <a href="https://www.sumatrapdfreader.org/settings.html#EscToExit">EscToExit</a> setting instead.</li>
 <li><code>-set-color-range &lt;text-hexcolor&gt; &lt;background-hexcolor&gt;</code> : Uses the given two colors for foreground and background and maps all other colors used in a document in between these two. E.g. <code>-set-color-range #dddddd #333333</code> displays soft white text on a dark gray background. [Deprecated]: Use the TextColor and BackgroundColor settings for FixedPageUI instead.</li>
 <li><code>-lang &lt;language-code&gt;</code> : Sets the UI language. See <a href="https://github.com/sumatrapdfreader/sumatrapdf/blob/master/scripts/trans_langs.py">/scripts/trans_langs.py</a> for the list of available language codes. E.g. -lang de. [Deprecated]: Use the UiLanguage setting instead.</li>
@@ -141,22 +142,20 @@
 
 <p>Deprecated: Use the <a href="https://www.sumatrapdfreader.org/settings.html#ComicBookUI_CbxMangaMode">CbxMangaMode</a> setting for ComicBookUI instead.</p>
 
-					</div>
-				</div>
-    </div>
+			</div>
+		</div>
+	</div>
 
-    <hr>
-    <center><a href="https://blog.kowalczyk.info">Krzysztof Kowalczyk</a></center>
-    <script>
-        window.ga = window.ga || function() {
-            (ga.q = ga.q || []).push(arguments)
-        };
-        ga.l = +new Date;
-        ga('create', 'UA-194516-5', 'auto');
-        ga('send', 'pageview');
-    </script>
-    <script async src="//www.google-analytics.com/analytics.js"></script>
-
+	<hr>
+	<center><a href="https://blog.kowalczyk.info">Krzysztof Kowalczyk</a></center>
+	<script>
+		window.ga = window.ga || function() {
+			(ga.q = ga.q || []).push(arguments)
+		};
+		ga.l = +new Date;
+		ga('create', 'UA-194516-5', 'auto');
+		ga('send', 'pageview');
+	</script>
+	<script async src="//www.google-analytics.com/analytics.js"></script>
 </body>
-
 </html>

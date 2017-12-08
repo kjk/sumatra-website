@@ -20,7 +20,7 @@ dlVer() {
   dlFile "SumatraPDF-${ver}-64.zip"
 }
 
-dlVer "3.1.1"
 dlVer "3.1.2"
+dlVer "3.1.1"
 dlVer "3.1"
 dlVer "3.0"

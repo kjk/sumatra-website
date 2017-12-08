@@ -18,8 +18,8 @@ var (
 
 var (
 	redirects = map[string]string{
-		"/docs/":      "/docs/SumatraPDF-documentation-fed36a5624d443fe9f7be0e410ecd715.html",
-		"/":           "/free-pdf-reader.html",
+		"/docs/": "/docs/SumatraPDF-documentation-fed36a5624d443fe9f7be0e410ecd715.html",
+		//"/":           "/free-pdf-reader.html",
 		"/index.html": "/free-pdf-reader.html",
 		"/index.php":  "/free-pdf-reader.html",
 		"/index.htm":  "/free-pdf-reader.html",
@@ -148,7 +148,6 @@ func writeCaddyConfig() {
 }
 
 func netlifyBuild() {
-	// /ping
 	netlifyWriteFile("/ping", []byte("pong"))
 
 	netlifyWriteRedirects()

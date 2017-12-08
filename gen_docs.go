@@ -62,6 +62,27 @@ const (
 `
 )
 
+// SumatraPDF-documentation-fed36a5624d443fe9f7be0e410ecd715.md
+// =>
+// SumatraPDF-documentation.html
+func shortHTMLNameFromMdName(s string) string {
+	name := filepath.Base(s)
+	name = replaceExt(name, "")
+	// SumatraPDF-documentation-fed36a5624d443fe9f7be0e410ecd715
+	idx := strings.LastIndex(name, "-")
+	if idx == -1 {
+		return name + ".html"
+	}
+	rest := name[idx+1:]
+	if len(rest) == 32 {
+		// SumatraPDF-documentation-fed36a5624d443fe9f7be0e410ecd715
+		// =>
+		// // SumatraPDF-documentation
+		name = name[:idx]
+	}
+	return name + ".html"
+}
+
 func isMdFile(path string) bool {
 	ext := strings.ToLower(filepath.Ext(path))
 	return ext == ".md"
@@ -110,14 +131,31 @@ func removeDocsHTML() {
 
 func docsHTMLPath(mdPath string) string {
 	dir := filepath.Join("www", "docs")
-	name := filepath.Base(mdPath)
-	name = replaceExt(name, ".html")
+	name := shortHTMLNameFromMdName(mdPath)
 	return filepath.Join(dir, name)
+}
+
+func addDocsRedirects(mdFilePaths []string) {
+	// for SumatraPDF-documentation-fed36a5624d443fe9f7be0e410ecd715.md
+	// add redirect
+	// /docs/SumatraPDF-documentation-*
+	// =>
+	// /docs/SumatraPDF-documentation.html
+	for _, name := range mdFilePaths {
+		name = shortHTMLNameFromMdName(name)
+		base := replaceExt(name, "")
+		from := fmt.Sprintf("/docs/%s-*", base)
+		to := fmt.Sprintf("/docs/%s.html", base)
+		netflifyAddTempRedirect(from, to)
+		fmt.Printf("%s => %s\n", from, to)
+	}
 }
 
 func genDocs() {
 	removeDocsHTML()
 	files := getDocsMdFiles()
+	addDocsRedirects(files)
+
 	for _, mdFile := range files {
 		d, err := ioutil.ReadFile(mdFile)
 		u.PanicIfErr(err)

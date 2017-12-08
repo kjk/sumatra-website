@@ -147,7 +147,7 @@ func addDocsRedirects(mdFilePaths []string) {
 		from := fmt.Sprintf("/docs/%s-*", base)
 		to := fmt.Sprintf("/docs/%s.html", base)
 		netflifyAddTempRedirect(from, to)
-		fmt.Printf("%s => %s\n", from, to)
+		//fmt.Printf("%s => %s\n", from, to)
 	}
 }
 
@@ -165,6 +165,6 @@ func genDocs() {
 		htmlPath := docsHTMLPath(mdFile)
 		err = ioutil.WriteFile(htmlPath, []byte(html), 0644)
 		u.PanicIfErr(err)
-		fmt.Printf("%s => %s\n", mdFile, htmlPath)
+		//fmt.Printf("%s => %s\n", mdFile, htmlPath)
 	}
 }

@@ -95,7 +95,7 @@ func isHTMLFile(path string) bool {
 
 func getDocsMdFiles() []string {
 	var res []string
-	dir := filepath.Join("www", "docs", "md")
+	dir := filepath.Join("docs_md")
 	fileInfos, err := ioutil.ReadDir(dir)
 	u.PanicIfErr(err)
 	for _, fi := range fileInfos {

@@ -118,7 +118,8 @@ func isRewrite(r *netlifyRedirect) bool {
 
 func genCaddyRedir(r *netlifyRedirect) string {
 	if r.from == "/" {
-		return fmt.Sprintf("rewrite / %s\n", r.to)
+		// this prevents loops in caddy-based preview
+		return ""
 	}
 	if isRewrite(r) {
 		if strings.HasSuffix(r.from, "*") {

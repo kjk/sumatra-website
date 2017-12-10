@@ -2,8 +2,5 @@ sumatra_website
 sumatra_website_linux
 *.zip
 *.exe
-www/docs/md/
 vendor/
-blog_app
 netlifyctl-debug.log
-Caddyfile

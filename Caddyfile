@@ -83,22 +83,22 @@ rewrite "/docs/Why-only-Windows-" {
     regexp (.*)
     to /docs/Why-only-Windows.html
 }
-redir "/sumatrapdf" "/free-pdf-reader.html" 302
 redir "/download.html" "/download-free-pdf-viewer.html" 302
-redir "/free-pdf-reader-ja.htmlPDF" "/free-pdf-reader.html" 302
-redir "/free-pdf-reader-ru.html/" "/free-pdf-reader.html" 302
-redir "/index.html" "/free-pdf-reader.html" 302
+redir "/develop.html" "/docs/Join-the-project-as-a-developer-be6ef085e89f49038c2b671c0743b690.html" 302
 redir "/index.php" "/free-pdf-reader.html" 302
 redir "/index.htm" "/free-pdf-reader.html" 302
-redir "/docs/" "/docs/SumatraPDF-documentation-fed36a5624d443fe9f7be0e410ecd715.html" 302
-redir "/forum.html" "https://forum.sumatrapdfreader.org" 302
-redir "/free-pdf-reader.html:" "/free-pdf-reader.html" 302
-redir "/develop.html/" "/docs/Join-the-project-as-a-developer-be6ef085e89f49038c2b671c0743b690.html" 302
-redir "/translators.html" "https://github.com/sumatrapdfreader/sumatrapdf/blob/master/TRANSLATORS" 302
-redir "/develop.html" "/docs/Join-the-project-as-a-developer-be6ef085e89f49038c2b671c0743b690.html" 302
 redir "/home.php" "/free-pdf-reader.html" 302
+redir "/free-pdf-reader-ru.html/" "/free-pdf-reader.html" 302
+redir "/docs/" "/docs/SumatraPDF-documentation-fed36a5624d443fe9f7be0e410ecd715.html" 302
 redir "/download-free-pdf-viewer-es.html," "/download-free-pdf-viewer.html" 302
+redir "/forum.html" "https://forum.sumatrapdfreader.org" 302
+redir "/index.html" "/free-pdf-reader.html" 302
+redir "/free-pdf-reader-ja.htmlPDF" "/free-pdf-reader.html" 302
+redir "/translators.html" "https://github.com/sumatrapdfreader/sumatrapdf/blob/master/TRANSLATORS" 302
+redir "/free-pdf-reader.html:" "/free-pdf-reader.html" 302
+redir "/sumatrapdf" "/free-pdf-reader.html" 302
+redir "/develop.html/" "/docs/Join-the-project-as-a-developer-be6ef085e89f49038c2b671c0743b690.html" 302
 rewrite "/dl/" {
     regexp (.*)
-    to https://kjkpub.s3.amazonaws.com/sumatrapdf/rel/{1}
+    to https://kjkpub.nyc3.digitaloceanspaces.com/software/sumatrapdf/rel/{1}
 }

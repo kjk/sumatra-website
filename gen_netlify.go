@@ -94,7 +94,8 @@ func netlifyWriteRedirects() {
 	netlifyAddStaticRedirects()
 
 	from := "/dl/*"
-	to := "https://kjkpub.s3.amazonaws.com/sumatrapdf/rel/:splat"
+	to := "https://kjkpub.nyc3.digitaloceanspaces.com/software/sumatrapdf/rel/:splat"
+	// to := "https://kjkpub.s3.amazonaws.com/sumatrapdf/rel/:splat"
 	netflifyAddTempRedirect(from, to)
 
 	var buf bytes.Buffer

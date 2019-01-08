@@ -13,5 +13,6 @@ exitIfFailed
 Start-Process -Wait -FilePath $exe
 Remove-Item -Path $exe
 
-netlifyctl deploy -b www
+# using https://github.com/netlify/cli
+netlify deploy --prod --dir www --site "2963982f-7d39-439c-a7eb-0eb118efbd02"
 # get-childitem . -include blog_app* | ForEach-Object ($_) {remove-item $_.fullname}

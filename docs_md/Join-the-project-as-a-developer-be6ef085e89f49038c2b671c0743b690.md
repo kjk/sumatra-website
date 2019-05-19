@@ -1,14 +1,14 @@
-# [Documentation](/docs/) : Join the project as a developer
+# [Documentation](/docs/): Join the project as a developer
 
 SumatraPDF is an open-source, [collaborative](https://github.com/sumatrapdfreader/sumatrapdf/blob/master/AUTHORS) project. We always welcome new developers who want to join the project, contribute code and new features.
 
 ## Getting the sources and compiling
 
-You'll need Visual Studio 2017 or 2015. A [free Community edition](https://www.visualstudio.com/vs/community/) will work.
+You'll need Visual Studio 2017. A [free Community edition](https://www.visualstudio.com/vs/community/) will work.
 
 Get the sources from [https://github.com/sumatrapdfreader/sumatrapdf](https://github.com/sumatrapdfreader/sumatrapdf)
 
-Open `vs2017/SumatraPDF.sln` or `vs2015/SumatraPDF.sln` , compile and run.
+Open `vs2017/SumatraPDF.sln`, compile and run.
 
 ## How to join SumatraPDF project
 
@@ -22,4 +22,4 @@ Before you start working on a significant addition, it's a good idea to first di
 
 ## Questions?
 
-You can use [issue tracker](https://github.com/sumatrapdfreader/sumatrapdf/issues) for development related topics or [forums](https://forum.sumatrapdfreader.org/ for general topics.
+You can use [issue tracker](https://github.com/sumatrapdfreader/sumatrapdf/issues) for development related topics or [forums](https://forum.sumatrapdfreader.org/) for general topics.

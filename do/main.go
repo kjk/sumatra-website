@@ -5,11 +5,20 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 
 	"github.com/kjk/u"
 )
 
-func runLocal() {
+func logf(format string, args ...interface{}) {
+	s := format
+	if len(args) > 0 {
+		s = fmt.Sprintf(format, args...)
+	}
+	fmt.Print(s)
+}
+
+func regenWebsite() {
 	exeName := "sumatra_website.exe"
 	// build the website generator
 	{
@@ -22,6 +31,11 @@ func runLocal() {
 		u.RunCmdLoggedMust(cmd)
 	}
 	os.Remove(exeName)
+}
+
+func runLocal() {
+	regenWebsite()
+
 	// run caddy to preview the website, on localhost:9000
 	{
 		cmd := exec.Command("caddy", "-log", "stdout")
@@ -32,16 +46,21 @@ func runLocal() {
 	}
 }
 
-func deploy() {
-	fmt.Printf("deploy\n")
+func deployProd() {
+	logf("deploying to netlify in production\n")
+
+	regenWebsite()
+
+	// using https://github.com/netlify/cli
+	cmd := exec.Command("netlify", "deploy", "--prod", "--dir", "www", "--site", "2963982f-7d39-439c-a7eb-0eb118efbd02")
+	u.RunCmdLoggedMust(cmd)
 }
 
-func logf(format string, args ...interface{}) {
-	s := format
-	if len(args) > 0 {
-		s = fmt.Sprintf(format, args...)
-	}
-	fmt.Print(s)
+func importNotion() {
+	// TODO: move that code here
+	cmd := exec.Command("go", "run", ".")
+	cmd.Dir = filepath.Join("cmd", "import_notion_docs")
+	u.RunCmdLoggedMust(cmd)
 }
 
 func main() {
@@ -49,21 +68,28 @@ func main() {
 	logf("dir: '%s'\n", u.CurrDirAbsMust())
 
 	var (
-		flgRun    bool
-		flgDeploy bool
+		flgRun          bool
+		flgDeployProd   bool
+		flgImportNotion bool
 	)
 	flag.BoolVar(&flgRun, "run", false, "run webserver locally to preview the changes")
-	flag.BoolVar(&flgDeploy, "deploy", false, "deploy to Netlify")
+	flag.BoolVar(&flgDeployProd, "deploy-prod", false, "deploy to Netlify")
+	flag.BoolVar(&flgImportNotion, "import-notion", false, "import notion as docs")
 	flag.Parse()
 
 	if flgRun {
 		runLocal()
 		return
 	}
-	if flgDeploy {
-		deploy()
+
+	if flgDeployProd {
+		deployProd()
 		return
 	}
 
+	if flgImportNotion {
+		importNotion()
+		return
+	}
 	flag.Usage()
 }

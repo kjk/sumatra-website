@@ -1,4 +1,1 @@
-## Sumatra PDF Reader website
-
-This is code behind https://www.sumatrapdfreader.org website for
-Sumatra PDF Reader.
+This is now part of main SumatraPDF repository https://github.com/sumatrapdfreader/sumatrapdf
